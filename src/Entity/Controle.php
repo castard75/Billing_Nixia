@@ -3,19 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\TelephoneRepository;
+use App\Repository\ControleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TelephoneRepository::class)]
+#[ORM\Entity(repositoryClass: ControleRepository::class)]
 #[ApiResource]
-class Telephone
+class Controle
 {
 
     public function __construct()
     {
         $this->createdat = new \DateTime('now');
         $this->updatedat = new \DateTime('now');
+        $this->startserviceat = new \DateTime('now');
     }
 
     #[ORM\Id]
@@ -44,13 +45,13 @@ class Telephone
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $reference = null;
 
-    #[ORM\Column(nullable: true,options: ['default' => 1] )]
+    #[ORM\Column(nullable: true ,options: ['default' => 1] )]
     private ?int $status = 1;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $createdat = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true,options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $updatedat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -62,11 +63,14 @@ class Telephone
     #[ORM\ManyToOne]
     private ?Customers $customerid = null;
 
-    #[ORM\Column(nullable: true, options: ['default' => 1] )]
+    #[ORM\Column(nullable: true ,options: ['default' => 1])]
     private ?int $niveau = 1;
 
     #[ORM\ManyToOne]
     private ?Contracts $contratid = null;
+
+    #[ORM\ManyToOne]
+    private ?Telephone $telephoneid = null;
 
     #[ORM\ManyToOne]
     private ?Myconnectors $origineid = null;
@@ -241,8 +245,6 @@ class Telephone
         return $this;
     }
 
-
-
     public function getNiveau(): ?int
     {
         return $this->niveau;
@@ -263,6 +265,18 @@ class Telephone
     public function setContratid(?Contracts $contratid): static
     {
         $this->contratid = $contratid;
+
+        return $this;
+    }
+
+    public function getTelephoneid(): ?Telephone
+    {
+        return $this->telephoneid;
+    }
+
+    public function setTelephoneid(?Telephone $telephoneid): static
+    {
+        $this->telephoneid = $telephoneid;
 
         return $this;
     }
