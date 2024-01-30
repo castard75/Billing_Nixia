@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
+body %} {% block stylesheets %}
+<style>
+  form {
+    max-width: 100% !important;
+  }
+
+  form input,
+  form select {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .form-containerAssociate {
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-item {
+    width: 100%;
+    margin-bottom: 20px; /* Espacement entre les formulaires */
+  }
+
+  .form-containerAssociate .form-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-field,
+  .form-containerAssociate .form-action {
+    flex-grow: 1; /* Permet à chaque champ de grandir et de remplir l'espace disponible */
+    margin-right: 10px; /* Espacement entre les champs */
+  }
+
+  .form-containerAssociate .form-field:last-child {
+    margin-right: 0; /* Supprime la marge droite pour le dernier champ */
+  }
+
+  .form-containerAssociate .submit-btn {
+    flex-grow: 0; /* Empêche le bouton de grandir autant que les champs */
+  }
+</style>
+{% endblock %}
+<main id="main" class="main">
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ path('app_home') }}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Téléphone</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-12">
+        <div class="row">
+          <!-- Reports -->
+          <!-- End Reports -->
+          <section class="section">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Gestion des associations</h5>
+                    <div id="success-message"></div>
+                  </div>
+                  <div class="form-containerAssociate">
+                    {% for form in forms %}
+                    <span id="errorform_{{ loop.index }}"></span>
+                    <div class="form-item">
+                      {{ form_start(form, {'attr': {'id': 'form_' ~ loop.index, 'class': 'ajax-form'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      }}) }}
+                      <div class="form-row">
+                        {{ form_widget(form.telephone, {'attr': {'hidden': 'hidden'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        }}) }}
+                        <div class="form-field">
+                          {{ form_widget(form.telephoneAffiche) }}
+                        </div>
+                        <div class="form-field">
+                          {{ form_widget(form.contrat) }}
+                        </div>
+                        <div class="form-action">
+                          <button
+                            type="button"
+                            class="submit-btn"
+                            data-form-id="form_{{ loop.index }}"
+                          >
+                            Associer
+                          </button>
+                        </div>
+                      </div>
+                      {{ form_end(form) }}
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                  <script>
+                    $(document).ready(function () {
+                      $(".submit-btn").click(function (e) {
+                        var formId = $(this).data("form-id");
+                        var form = $("#" + formId);
+
+                        $("#error" + formId).html("");
+                        $.ajax({
+                          url: form.attr("action"),
+                          type: form.attr("method"),
+                          data: form.serialize(),
+                          success: function (response) {
+                            if (response.success) {
+                              $("#success-message").html(
+                                '<div class="alert alert-success" role="alert"><span>Association réalisée avec succès</span></div>'
+                              );
+                            } else {
+                              if (
+                                response.errors &&
+                                response.errors.length > 0
+                              ) {
+                                var errorsHtml = "<ul>";
+                                response.errors.forEach(function (error) {
+                                  errorsHtml += "<li>" + error + "</li>";
+                                });
+                                errorsHtml += "</ul>";
+                              }
+                              $("#error" + formId).html(errorsHtml);
+                            }
+                          },
+                          error: function (jqXHR, textStatus, textStatus) {
+                            if (jqXHR.responseJSON.errors.length > 0) {
+                              var errorsHtml = "<ul>";
+                              jqXHR.responseJSON.errors.forEach(function (
+                                error
+                              ) {
+                                errorsHtml += "<li>" + error + "</li>";
+                              });
+                              errorsHtml += "</ul>";
+                            }
+                            $("#error" + formId).html(errorsHtml);
+                          },
+                        });
+                      });
+                    });
+                  </script>
+                  <!-- End Table with stripped rows -->
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <!-- End Left side columns -->
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{#
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Contrats</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item">Pages</li>
+        <li class="breadcrumb-item active">Contact</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+</main>
+#} {% endblock %}

@@ -1,0 +1,137 @@
+<div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+  <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper">
+    <div
+      id="kt_app_sidebar_menu_scroll"
+      class="scroll-y my-5 mx-3"
+      data-kt-scroll="true"
+      data-kt-scroll-activate="true"
+      data-kt-scroll-height="auto"
+      data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
+      data-kt-scroll-wrappers="#kt_app_sidebar_menu"
+      data-kt-scroll-offset="5px"
+      data-kt-scroll-save-state="true"
+    >
+      <div
+        class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6"
+        id="#kt_app_sidebar_menu"
+        data-kt-menu="true"
+        data-kt-menu-expand="false"
+      >
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-wanchain fs-2"></i>
+            </span>
+            <span class="menu-title">Dashboard</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-people fs-2"></i>
+            </span>
+            <span class="menu-title">Tiers</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-feather fs-2"></i>
+            </span>
+            <span class="menu-title">Contrats</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-parcel fs-2"></i>
+            </span>
+            <span class="menu-title">Appareils</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-compass fs-2"></i>
+            </span>
+            <span class="menu-title">Sites</span>
+          </a>
+        </div>
+        <div class="menu-item d-none">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-question fs-2"></i>
+            </span>
+            <span class="menu-title">Demandes</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-time fs-2"></i>
+            </span>
+            <span class="menu-title">Interventions</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <i class="ki-outline ki-message-question fs-2"></i>
+            </span>
+            <span class="menu-title">Tickets</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <span class="menu-icon">
+                <i class="ki-outline ki-calendar fs-2"> </i>
+              </span>
+            </span>
+            <span class="menu-title">Visites</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a
+            class="menu-link {% if app.request.requestUri == path('app_home') %}active{% endif %}"
+            href="{{ path('app_home') }}"
+          >
+            <span class="menu-icon">
+              <span class="menu-icon">
+                <i class="ki-outline ki-calendar fs-2"> </i>
+              </span>
+            </span>
+            <span class="menu-title">Astreinte</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

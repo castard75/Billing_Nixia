@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %} {% block title %}Hello PricingController!{%
+endblock %} {% block body %}
+<div id="main" class="main">
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Pricing</h5>
+
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">Select</th>
+                  <th scope="col">Contrat</th>
+                  <th scope="col">Téléphone</th>
+                  {#
+                  <th scope="col">Facturer</th>
+                  #}
+                  <th>
+                    <button
+                      type="button"
+                      class="btn btn-primary submit-btn"
+                      style="color: white"
+                      data-bs-toggle="modal"
+                      data-bs-target="#basicModal"
+                      data-coefficient="{{ coefficient }}"
+                    >
+                      Facturer
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for value in controlTab %}
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="scales"
+                      name="scales"
+                      data-contractid="{{ value.contratid }}"
+                      data-telephoneid="{{ value.telephoneId }}"
+                      data-number="{{ value.number }}"
+                      data-name="{{ value.contratName }}"
+                      data-coefficient="{{ coefficient }}"
+                      id="toggleSwitch"
+                    />
+                  </td>
+                  <td class="contratId">
+                    {{ value.contratName }}
+                  </td>
+                  <td>
+                    {{ value.telephoneId }}
+                  </td>
+                  <td></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="basicModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div id="succes"></div>
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Contrats sélectionnés
+          </h5>
+          <button
+            type="button"
+            class="btn-close dismiss-btn"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <ul id="telephoneCheckedValues" class="list-group"></ul>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal dismiss-btn"
+            data-bs-dismiss="modal"
+          >
+            Annuler
+          </button>
+          <button type="button" class="btn btn-primary" id="validate-invoice">
+            Valider
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Basic Modal-->
+</div>
+<script>
+  $(document).ready(function () {
+    let selectedTel = [];
+    let priceTable = [];
+
+    $(".scales").click(function (e) {
+      let contratChecked = $(this).data("contractid");
+      let telephoneChecked = $(this).data("telephoneid");
+      let idNumber = $(this).data("number");
+      let name = $(this).data("name");
+      let coefficient = $(this).data("coefficient");
+
+      if (this.checked) {
+        let exists = selectedTel.some((item) => {
+          return (
+            item.contratChecked === contratChecked &&
+            item.telephoneChecked === telephoneChecked
+          );
+        });
+
+        if (!exists) {
+          selectedTel.push({
+            contratChecked,
+            telephoneChecked,
+            idNumber,
+            name,
+          });
+        }
+      } else {
+        let index = selectedTel.findIndex(
+          (item) =>
+            item.contratChecked === contratChecked &&
+            item.telephoneChecked === telephoneChecked
+        );
+
+        if (index !== -1) {
+          selectedTel.splice(index, 1);
+        }
+      }
+    });
+
+    let telArray = [];
+
+    ////------------------SUBMIT FOrM-------------------////
+
+    $(".submit-btn").click(function (e) {
+      //Gestion de calcul du prix
+      e.preventDefault();
+      //console.log(selectedTel);
+
+      $.ajax({
+        type: "POST",
+        url: "/getPrice",
+        data: JSON.stringify(selectedTel),
+
+        success: function (response) {
+          const dataTab = response.datas;
+          let dataResponse;
+          let obj;
+
+          for (let val in dataTab) {
+            let clientName = dataTab[val].contrat.split(":")[2];
+            let getTotal = dataTab[val].total;
+            let totalToPay = (getTotal * 4).toFixed(4);
+            let coef = dataTab[val].coefficient;
+            console.log(coef);
+
+            obj = {
+              total: totalToPay,
+              caller: dataTab[val].caller,
+              contrat: clientName,
+              contratId: dataTab[val].contratId,
+            };
+
+            //Ajout des détails de la consomation du client dans priceTable
+            priceTable.push(obj);
+          }
+
+          updateTelephoneCheckedList();
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
+    });
+
+    function updateTelephoneCheckedList() {
+      let telephoneCheckedList = priceTable.map((item) => {
+        return `<li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">Client</div>
+            ${item.contrat}
+          </div>
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">numéro</div>
+            ${item.caller}
+          </div>
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">total</div>
+            <span class="badge bg-success rounded-pill">${item.total} €</span>
+          </div>
+
+        </li>`;
+      });
+      $("#telephoneCheckedValues").html(telephoneCheckedList.join(""));
+    }
+
+    ////------------------- DISMISS---------------------////
+
+    $(".dismiss-btn").click(function (e) {
+      //Mise au propre du modal et de priceTable
+
+      priceTable = [];
+
+      updateTelephoneCheckedList();
+
+      $(".scales").prop("checked", false);
+      selectedTel = [];
+    });
+
+    ////----------------------------FACTURATION--------------------------////
+
+    $("#validate-invoice").click(function (e) {
+      e.preventDefault();
+      console.log(priceTable);
+      $.ajax({
+        type: "POST",
+        url: "/postInvoices",
+        data: JSON.stringify(priceTable),
+        success: function (response) {
+          console.log(response);
+
+          updateTelephoneCheckedList();
+
+          $(".scales").prop("checked", false);
+          selectedTel = [];
+
+          $("#succes").html(
+            ' <div class="alert alert-success" role="alert">Opération éxécuter avec succès </div>'
+          );
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

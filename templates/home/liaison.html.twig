@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
+body %}
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active">Association</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-12">
+        <div class="row">
+          <section class="section">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Liste des associations</h5>
+
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable">
+                      <thead>
+                        <tr>
+                          <th scope="col">Reférence</th>
+                          <th scope="col">Nom</th>
+
+                          <th scope="col">Téléphone</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for control in controls %}
+                        <tr>
+                          <td>
+                            {{ control.contratid.reference }}
+                          </td>
+                          <td>
+                            {{ control.contratid.customerid.name }}
+                          </td>
+                          <td class="d-none">{{ control.telephoneid.name }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <!-- End Left side columns -->
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{#
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Contrats</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item">Pages</li>
+        <li class="breadcrumb-item active">Contact</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+</main>
+#} {% endblock %}

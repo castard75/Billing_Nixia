@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
+body %} {% block stylesheets %}
+<style>
+  form {
+    max-width: 100% !important;
+  }
+
+  form input,
+  form select {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .form-containerAssociate {
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-item {
+    width: 100%;
+    margin-bottom: 20px; /* Espacement entre les formulaires */
+  }
+
+  .form-containerAssociate .form-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-field,
+  .form-containerAssociate .form-action {
+    flex-grow: 1; /* Permet à chaque champ de grandir et de remplir l'espace disponible */
+    margin-right: 10px; /* Espacement entre les champs */
+  }
+
+  .form-containerAssociate .form-field:last-child {
+    margin-right: 0; /* Supprime la marge droite pour le dernier champ */
+  }
+
+  .form-containerAssociate .submit-btn {
+    flex-grow: 0; /* Empêche le bouton de grandir autant que les champs */
+  }
+</style>
+{% endblock %}
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Liste des clients</h1>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title"></div>
+
+            <!-- Table with stripped rows -->
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">Référence</th>
+                  <th scope="col">Nom</th>
+
+                  <th scope="col">Email</th>
+                  <th scope="col">Statut</th>
+                  <th scope="col">voir</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for Tiers in ListTiers %}
+                <tr>
+                  <td>
+                    {{ Tiers.reference }}
+                  </td>
+                  <td>
+                    {{ Tiers.name }}
+                  </td>
+
+                  <td>{{ Tiers.Email }}</td>
+                  <td>
+                    {% if Tiers.state == 1 %}
+                    <span class="badge bg-success">terminé</span>{% else %}
+                    <span class="badge bg-primary">En cours</span>{% endif %}
+                  </td>
+                  <td class="pe-auto">
+                    <a href="{{ path('app_tiers_detail', { id: Tiers.id }) }}">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+{% endblock %}
