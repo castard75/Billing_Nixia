@@ -32,6 +32,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "prop-types": "^15.8.1"
+        "chart.js": "^4.4.1",
+        "prop-types": "^15.8.1",
+        "react-chartjs-2": "^5.2.0"
     }
 }
