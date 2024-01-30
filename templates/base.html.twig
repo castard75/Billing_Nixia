@@ -72,6 +72,7 @@ https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css
     />
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
     {{
       encore_entry_link_tags("app")
     }}
@@ -89,6 +90,7 @@ https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css
     />
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     {% endblock %} {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
     {{
       encore_entry_script_tags("app")
     }}
