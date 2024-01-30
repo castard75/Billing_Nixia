@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MyconnectorsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -39,6 +41,22 @@ class Myconnectors
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true )]
     private ?\DateTimeInterface $deletedat = null;
+
+    #[ORM\OneToMany(mappedBy: 'origineid', targetEntity: Contracts::class)]
+    private Collection $contracts;
+
+    #[ORM\OneToMany(mappedBy: 'origineid', targetEntity: Customers::class)]
+    private Collection $customers;
+
+    #[ORM\OneToMany(mappedBy: 'origineid', targetEntity: Invoices::class)]
+    private Collection $invoices;
+
+    public function __construct()
+    {
+        $this->contracts = new ArrayCollection();
+        $this->customers = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +155,96 @@ class Myconnectors
     public function setDeletedat(?\DateTimeInterface $deletedat): static
     {
         $this->deletedat = $deletedat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contracts>
+     */
+    public function getContracts(): Collection
+    {
+        return $this->contracts;
+    }
+
+    public function addContract(Contracts $contract): static
+    {
+        if (!$this->contracts->contains($contract)) {
+            $this->contracts->add($contract);
+            $contract->setOrigineid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContract(Contracts $contract): static
+    {
+        if ($this->contracts->removeElement($contract)) {
+            // set the owning side to null (unless already changed)
+            if ($contract->getOrigineid() === $this) {
+                $contract->setOrigineid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Customers>
+     */
+    public function getCustomers(): Collection
+    {
+        return $this->customers;
+    }
+
+    public function addCustomer(Customers $customer): static
+    {
+        if (!$this->customers->contains($customer)) {
+            $this->customers->add($customer);
+            $customer->setOrigineid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomer(Customers $customer): static
+    {
+        if ($this->customers->removeElement($customer)) {
+            // set the owning side to null (unless already changed)
+            if ($customer->getOrigineid() === $this) {
+                $customer->setOrigineid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoices>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoices $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setOrigineid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoices $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getOrigineid() === $this) {
+                $invoice->setOrigineid(null);
+            }
+        }
 
         return $this;
     }

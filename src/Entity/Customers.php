@@ -123,9 +123,16 @@ class Customers
     #[ORM\OneToMany(mappedBy: 'customerid', targetEntity: Contracts::class)]
     private Collection $contracts;
 
+    #[ORM\ManyToOne(inversedBy: 'customers')]
+    private ?Myconnectors $origineid = null;
+
+    #[ORM\OneToMany(mappedBy: 'customerid', targetEntity: Invoices::class)]
+    private Collection $invoices;
+
     public function __construct()
     {
         $this->contracts = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -565,6 +572,48 @@ class Customers
             // set the owning side to null (unless already changed)
             if ($contract->getCustomerid() === $this) {
                 $contract->setCustomerid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOrigineid(): ?Myconnectors
+    {
+        return $this->origineid;
+    }
+
+    public function setOrigineid(?Myconnectors $origineid): static
+    {
+        $this->origineid = $origineid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoices>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoices $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setCustomerid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoices $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getCustomerid() === $this) {
+                $invoice->setCustomerid(null);
             }
         }
 

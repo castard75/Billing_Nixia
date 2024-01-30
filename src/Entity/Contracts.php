@@ -58,6 +58,9 @@ class Contracts
     #[ORM\ManyToOne(inversedBy: 'contracts')]
     private ?Customers $customerid = null;
 
+    #[ORM\ManyToOne(inversedBy: 'contracts')]
+    private ?Myconnectors $origineid = null;
+
 
     //Permet de renvoyer par défault a twig le nom du contrat
     public function __toString(): string
@@ -239,6 +242,18 @@ class Contracts
     public function setCustomerid(?Customers $customerid): static
     {
         $this->customerid = $customerid;
+
+        return $this;
+    }
+
+    public function getOrigineid(): ?Myconnectors
+    {
+        return $this->origineid;
+    }
+
+    public function setOrigineid(?Myconnectors $origineid): static
+    {
+        $this->origineid = $origineid;
 
         return $this;
     }
