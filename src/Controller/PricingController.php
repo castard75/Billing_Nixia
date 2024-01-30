@@ -143,14 +143,14 @@ class PricingController extends AbstractController
             $callerOutDate->modify('+1 day');
             $formattedDate = $callerOutDate->format('Y-m-d');
 
-            ////-------------------récupération des communications--------------------////
+            ////-------------------récupération des communications du mois précédents--------------------////
             foreach ($findCaller as $cdr) {
               
             $sipTrunk = $cdr->getSipTrunk();
             $idObj = $cdr->getId();
             $queryBuilderPrice = $cdrRepository->createQueryBuilder('c');
 
-           //Requête filtrage entre date de début de mois et fin de contrat
+           //Requête filtrage du mois entre date de début de mois et fin de contrat 
 
             $queryBuilderPrice->where('c.sipTrunk = :sipTrunk')
             ->setParameter('sipTrunk', $sipTrunk)
