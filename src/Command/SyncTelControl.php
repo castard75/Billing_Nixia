@@ -83,13 +83,13 @@ $this->desc = $this->setDescription("check et ajout de téléphones");
                     $newTelephone = new Telephone();
                     $newTelephone->setName($callerName);
                     $this->em->persist($newTelephone);
-
+                  
                       //Ajout dans history
                       $history = (new History())  
                       ->setTitle("Nouveau numéro")
                       ->setDescription("Le numéro"." " .  $callerName . " a été ajouté ");
-                      $entityManager->persist($history);
-                      $entityManager->flush();
+                      $this->em->persist($history);
+                      $this->em->flush();
                 }
 
 
