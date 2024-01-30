@@ -9,9 +9,6 @@ use DateTimeImmutable;
 // use App\Entity\Voxwide;
 use Symfony\Component\Validator\Constraints\DateTime;
 use App\Entity\Cdr;
-use App\Entity\Sda;
-use App\Entity\Cds;
-use App\Entity\ParamSDA;
 use App\Entity\IndicatifSda;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -125,7 +122,7 @@ class VoxwideCommand extends Command
                     'dateAt' => $dateImmutable,
                 ]);
               
-                $Sda_entity = new Sda();
+                
                 if (!$existingCDR) {
                 $voxwide = (new CDR())
                     ->setSiptrunk($col[1])
