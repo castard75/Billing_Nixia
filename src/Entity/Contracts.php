@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ContractsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -60,6 +62,14 @@ class Contracts
 
     #[ORM\ManyToOne(inversedBy: 'contracts')]
     private ?Myconnectors $origineid = null;
+
+    #[ORM\OneToMany(mappedBy: 'contractid', targetEntity: LinkContractInvoice::class)]
+    private Collection $linkContractInvoices;
+
+    public function __construct()
+    {
+        $this->linkContractInvoices = new ArrayCollection();
+    }
 
 
     //Permet de renvoyer par défault a twig le nom du contrat
@@ -254,6 +264,36 @@ class Contracts
     public function setOrigineid(?Myconnectors $origineid): static
     {
         $this->origineid = $origineid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LinkContractInvoice>
+     */
+    public function getLinkContractInvoices(): Collection
+    {
+        return $this->linkContractInvoices;
+    }
+
+    public function addLinkContractInvoice(LinkContractInvoice $linkContractInvoice): static
+    {
+        if (!$this->linkContractInvoices->contains($linkContractInvoice)) {
+            $this->linkContractInvoices->add($linkContractInvoice);
+            $linkContractInvoice->setContractid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLinkContractInvoice(LinkContractInvoice $linkContractInvoice): static
+    {
+        if ($this->linkContractInvoices->removeElement($linkContractInvoice)) {
+            // set the owning side to null (unless already changed)
+            if ($linkContractInvoice->getContractid() === $this) {
+                $linkContractInvoice->setContractid(null);
+            }
+        }
 
         return $this;
     }

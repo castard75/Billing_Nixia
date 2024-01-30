@@ -90,9 +90,15 @@ class Invoices
     #[ORM\OneToMany(mappedBy: 'invoiceid', targetEntity: Invoicesitems::class)]
     private Collection $invoicesitems;
 
+    #[ORM\OneToMany(mappedBy: 'invoiceid', targetEntity: LinkContractInvoice::class)]
+    private Collection $linkContractInvoices;
+
+
     public function __construct()
     {
         $this->invoicesitems = new ArrayCollection();
+        $this->linkContractInvoices = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -405,4 +411,36 @@ class Invoices
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, LinkContractInvoice>
+     */
+    public function getLinkContractInvoices(): Collection
+    {
+        return $this->linkContractInvoices;
+    }
+
+    public function addLinkContractInvoice(LinkContractInvoice $linkContractInvoice): static
+    {
+        if (!$this->linkContractInvoices->contains($linkContractInvoice)) {
+            $this->linkContractInvoices->add($linkContractInvoice);
+            $linkContractInvoice->setInvoiceid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLinkContractInvoice(LinkContractInvoice $linkContractInvoice): static
+    {
+        if ($this->linkContractInvoices->removeElement($linkContractInvoice)) {
+            // set the owning side to null (unless already changed)
+            if ($linkContractInvoice->getInvoiceid() === $this) {
+                $linkContractInvoice->setInvoiceid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 }
