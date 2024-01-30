@@ -33,7 +33,8 @@ security:
     - { path: ^/api/create/user$, methods: [POST], roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: ROLE_USER }
     - { path: ^/auth, roles: PUBLIC_ACCESS }
-    - { path: ^/, roles: PUBLIC_ACCESS }
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/, roles: ROLE_ADMIN }
 
 when@test:
   security:

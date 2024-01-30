@@ -62,13 +62,13 @@ class InsertService {
             $this->em->persist($invoiceitem);
              $this->em->flush();
             
-            $linkContrat = (new LinkContractInvoice())
-            ->setContractid($contratId)
-            ->setInvoiceid($invoiceId);
+            // $linkContrat = (new LinkContractInvoice())
+            // ->setContractid($contratId)
+            // ->setInvoiceid($invoiceId);
             
            
             
-            $this->em->persist($linkContrat);
+            // $this->em->persist($linkContrat);
             $this->em->flush();
 
 
