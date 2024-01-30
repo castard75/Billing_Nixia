@@ -79,6 +79,14 @@ class Telephone
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endserviceat = null;
+    
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s',
+            $this->name,
+        );
+    }
 
     public function getId(): ?int
     {
