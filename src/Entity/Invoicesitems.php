@@ -11,6 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Invoicesitems
 {
+    public function __construct()
+    {
+        $this->createdat = new \DateTime('now');
+
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -72,6 +78,9 @@ class Invoicesitems
 
     #[ORM\ManyToOne(inversedBy: 'invoicesitems')]
     private ?Invoices $invoiceid = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdat = null;
 
     public function getId(): ?int
     {
@@ -302,6 +311,18 @@ class Invoicesitems
     public function setInvoiceid(?Invoices $invoiceid): static
     {
         $this->invoiceid = $invoiceid;
+
+        return $this;
+    }
+
+    public function getCreatedat(): ?\DateTimeInterface
+    {
+        return $this->createdat;
+    }
+
+    public function setCreatedat(\DateTimeInterface $createdat): static
+    {
+        $this->createdat = $createdat;
 
         return $this;
     }
