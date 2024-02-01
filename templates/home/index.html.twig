@@ -122,6 +122,7 @@ body %}
               </div>
             </div>
           </div>
+   
           <div class="col-lg-12">
             <div {{ react_component("StatistiqueTotal") }}>
           </div>
@@ -138,23 +139,36 @@ body %}
         <div class="card-body">
           <h5 class="card-title">Activités Récente</h5>
 
-          <div class="activity">
-            {% for items in history %}
-            <div class="activity-item d-flex">
-              <div class="activite-label">
-                <span>{{ items.createdAt|date("H:i") }}</span> -
-                {{ items.title }}
-              </div>
-              <i
-                class="bi bi-circle-fill activity-badge text-success align-self-start"
-              ></i>
-              <div class="activity-content">
-                {{ items.description }}
-              </div>
-            </div>
-            {% endfor %}
-            <!-- End activity item-->
-          </div>
+      <div class="activity">
+     
+  {% if history %}
+    {% for items in history %}
+      <div class="activity-item d-flex">
+        <div class="activite-label">
+          <span>{{ items.createdAt|date("H:i") }}</span> -
+          {{ items.title }}
+        </div>
+        <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+        <div class="activity-content">
+          {{ items.description }}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="activity-item d-flex">
+        <div class="activite-label">
+          <span>{{ "now"|date("d/m/Y") }}</span> -
+        
+        </div>
+        <i class="bi bi-circle-fill activity-badge text-danger align-self-start"></i>
+        <div class="activity-content">
+     Aucun historique 
+        </div>
+      </div>
+  {% endif %}
+  <!-- End activity item-->
+</div>
+
         </div>
       </div>
       <!-- End Recent Activity -->

@@ -3,81 +3,19 @@ import { Bar } from "react-chartjs-2";
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
+import { months } from "../../utils/monthsList";
 
 export default function StatistiqueTotal() {
-  ///-----------------------------STATES-----------------------------///
+  /*######################## STATES ########################*/
 
   const [invoiceDatas, setInvoiceDatas] = useState();
   const [loading, setLoading] = useState(false);
 
   const [chartDatas, setChartDatas] = useState();
 
-  ////---------------------Load Invoices Datas----------------------------////
+  /*######################## Load Invoices Datas ########################*/
 
   const token = localStorage.getItem("token");
-
-  let months = [
-    {
-      code: 1,
-      label: "janvier",
-      total: null,
-    },
-    {
-      code: 2,
-      label: "février",
-      total: null,
-    },
-    {
-      code: 3,
-      label: "mars",
-      total: null,
-    },
-    {
-      code: 4,
-      label: "avril",
-      total: null,
-    },
-    {
-      code: 5,
-      label: "mai",
-      total: null,
-    },
-    {
-      code: 6,
-      label: "juin",
-      total: null,
-    },
-    {
-      code: 7,
-      label: "juillet",
-      total: null,
-    },
-    {
-      code: 8,
-      label: "août",
-      total: null,
-    },
-    {
-      code: 9,
-      label: "septembre",
-      total: null,
-    },
-    {
-      code: 10,
-      label: "octobre",
-      total: null,
-    },
-    {
-      code: 11,
-      label: "novembre",
-      total: null,
-    },
-    {
-      code: 12,
-      label: "décembre",
-      total: null,
-    },
-  ];
 
   /*######################## GESTION STATISTIQUES ########################*/
 
@@ -93,14 +31,13 @@ export default function StatistiqueTotal() {
             months.total = el.total;
           }
         });
-        console.log("yes");
+
         return findMonth;
       });
     },
     [watchInvoiceItems]
   );
 
-  console.log("render");
   useEffect(() => {
     axios
       .request({
