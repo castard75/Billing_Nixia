@@ -1,32 +1,39 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
+  const badUseRef = useRef(null);
+  /*################################## react-hook-form ###################################*/
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  ////------------------------HANDLE SUBMIT-------------------------------////
-  const handleSubmit = (e) => {
+  /*################################## HANDLE SUBMIT ###################################*/
+
+  const submit = (data, e) => {
     e.preventDefault();
 
-    const data = { email: email, password: password };
-
-    ////---------------------REQUETE---------------------////
+    const userInfos = { email: data.email, password: data.password };
 
     axios
-      .post("https://localhost:8000/auth", data)
+      .post("https://localhost:8000/auth", userInfos)
       .then((res) => {
         const { token } = res.data;
         if (token) {
           const tokenStorage = localStorage.setItem("token", token);
           window.location = "/home";
         } else {
-          window.location = "/";
+          throw new Error("Token non générer");
         }
       })
       .catch((err) => {
-        console.log(err);
+        badUseRef.current.innerText = "Mot de passe ou identifiant incorrect.";
       });
   };
 
@@ -37,10 +44,10 @@ export default function Login() {
           <div className="d-flex justify-content-center py-4">
             <a
               href="index.html"
-              className="logo d-flex align-items-center w-auto"
+              className="logo d-flex align-items-center w-auto "
+              // style={{ color: "red" }}
             >
-              {/* <img src="assets/img/logo.png" alt="" /> */}
-              <span className="d-none d-lg-block">NixiaAdmin</span>
+              <span className="d-none d-lg-block">Nixia Billing</span>
             </a>
           </div>
 
@@ -48,11 +55,8 @@ export default function Login() {
             <div className="card-body">
               <div className="pt-4 pb-2">
                 <h5 className="card-title text-center pb-0 fs-4">
-                  Login to Your Account
+                  Connexion à votre compte
                 </h5>
-                <p className="text-center small">
-                  Enter your username & password to login
-                </p>
               </div>
 
               <form className="row g-3 needs-validation" noValidate>
@@ -71,11 +75,12 @@ export default function Login() {
                       id="email"
                       required
                       onChange={(e) => setEmail(e.target.value)}
+                      {...register("email", { required: true })}
                     />
-                    <div className="invalid-feedback">
-                      Please enter your email.
-                    </div>
                   </div>
+                  {errors.email && (
+                    <p style={{ color: "red" }}>Veuillez saisir votre email.</p>
+                  )}
                 </div>
 
                 <div className="col-12">
@@ -88,20 +93,22 @@ export default function Login() {
                     className="form-control"
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
-                    required
+                    {...register("password", { required: true })}
                   />
-                  <div className="invalid-feedback">
-                    Please enter your password!
-                  </div>
+                  {errors.password && (
+                    <p style={{ color: "red" }}>
+                      Veuillez saisir votre mot de passe.
+                    </p>
+                  )}
                 </div>
 
                 <div className="col-12">
                   <button
                     className="btn btn-primary w-100 submit-btn"
                     type="submit"
-                    onClick={handleSubmit}
+                    onClick={handleSubmit(submit)}
                   >
-                    Login
+                    Se connecter
                   </button>
                 </div>
                 <div className="col-12">
@@ -110,6 +117,12 @@ export default function Login() {
                   </p>
                 </div>
               </form>
+              <div id="invalidInfos" className="d-flex justify-content-center">
+                {" "}
+                <p style={{ color: "red" }} ref={badUseRef}>
+                  {" "}
+                </p>
+              </div>
             </div>
           </div>
         </div>
