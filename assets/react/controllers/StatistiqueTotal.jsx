@@ -1,7 +1,7 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 
 export default function StatistiqueTotal() {
@@ -16,57 +16,91 @@ export default function StatistiqueTotal() {
 
   const token = localStorage.getItem("token");
 
-  let mois = [
+  let months = [
     {
       code: 1,
       label: "janvier",
+      total: null,
     },
     {
       code: 2,
       label: "février",
+      total: null,
     },
     {
       code: 3,
       label: "mars",
+      total: null,
     },
     {
       code: 4,
       label: "avril",
+      total: null,
     },
     {
       code: 5,
       label: "mai",
+      total: null,
     },
     {
       code: 6,
       label: "juin",
+      total: null,
     },
     {
       code: 7,
       label: "juillet",
+      total: null,
     },
     {
       code: 8,
       label: "août",
+      total: null,
     },
     {
       code: 9,
       label: "septembre",
+      total: null,
     },
     {
       code: 10,
       label: "octobre",
+      total: null,
     },
     {
       code: 11,
       label: "novembre",
+      total: null,
     },
     {
       code: 12,
       label: "décembre",
+      total: null,
     },
   ];
 
+  /*######################## GESTION STATISTIQUES ########################*/
+
+  const [watchInvoiceItems, setWatchInvoiceItems] = useState(null);
+
+  //useCallback pour ne pas jouer la fonction a chaque render et se lance seulement si une nouvelle facture est crée
+
+  const initStats = useCallback(
+    (groupedByMonth, months) => {
+      groupedByMonth.map((el) => {
+        let findMonth = months.filter((months) => {
+          if (months.code == el.month) {
+            months.total = el.total;
+          }
+        });
+        console.log("yes");
+        return findMonth;
+      });
+    },
+    [watchInvoiceItems]
+  );
+
+  console.log("render");
   useEffect(() => {
     axios
       .request({
@@ -79,7 +113,7 @@ export default function StatistiqueTotal() {
       .then((response) => {
         const values = response.data["hydra:member"];
 
-        //---------------tableau avec les valeur de la requête-----------------//
+        /*######################## TABLEAU D'OBJETS CONTENANT LES VALEURS POUR LE TRAITEMENT ########################*/
 
         const invoicesitems = values.map((item) => ({
           id: item.id,
@@ -87,7 +121,7 @@ export default function StatistiqueTotal() {
           ht: item.ht,
         }));
 
-        /*######################## Gestion des élements par Mois ave calcul du total ########################*/
+        /*######################## CALCUL DU TOTAL EN FONCTION DU months ########################*/
 
         const groupedByMonth = invoicesitems.reduce((accumulator, element) => {
           const existingItem = accumulator.find(
@@ -107,31 +141,23 @@ export default function StatistiqueTotal() {
           return accumulator;
         }, []);
 
-        /*######################## ENVOIE DE LA DATA DANS CHART ########################*/
+        /*######################## INITIALISATION DU TABLEAU ########################*/
 
+        initStats(groupedByMonth, months);
+
+        /*######################## ENVOIE DE LA DATA DANS CHART ########################*/
         setChartDatas({
-          labels: groupedByMonth.map((data) => {
-            let date = mois.filter((el) => {
-              if (el.code == data.month) {
-                return el.label;
-              }
-            });
-            console.log(date.label);
-            return date.map((el) => el.label);
-          }),
+          labels: months.map((item) => item.label),
 
           datasets: [
             {
               label: "Total",
-              data: groupedByMonth.map((item) => item.total),
-
-              // Use the month name if there's a match, or an empty string otherwise
-
-              backgroundColor: ["#50AF95", "#f3ba2f", "#2a71d0"],
+              data: months.map((item) => item.total),
+              backgroundColor: ["#50AF95", "#f3ba2f", "#2a71d0", "#5bc0eb"],
             },
           ],
         });
-
+        setWatchInvoiceItems(invoicesitems);
         setLoading(true);
       });
   }, []);

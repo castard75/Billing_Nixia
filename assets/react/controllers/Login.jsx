@@ -6,7 +6,6 @@ export default function Login() {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
 
-  //   Test12345
   ////------------------------HANDLE SUBMIT-------------------------------////
   const handleSubmit = (e) => {
     e.preventDefault();
