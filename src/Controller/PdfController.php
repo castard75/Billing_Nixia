@@ -5,15 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Invoices;
 
-class StatsController extends AbstractController
+class PdfController extends AbstractController
 {
-    #[Route('/stats', name: 'app_stats')]
+    #[Route('/pdf', name: 'app_pdf')]
     public function index(): Response
     {
-        return $this->render('stats/index.html.twig', [
-            'controller_name' => 'StatsController',
-           
+        return $this->render('pdf/index.html.twig', [
+            'controller_name' => 'PdfController',
         ]);
     }
 }
