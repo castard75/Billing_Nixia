@@ -88,7 +88,7 @@ export default function StatistiqueTotal() {
 
           datasets: [
             {
-              label: "Total",
+              label: "Montant total facturé",
               data: months.map((item) => item.total),
               backgroundColor: ["#50AF95", "#f3ba2f", "#2a71d0", "#5bc0eb"],
             },

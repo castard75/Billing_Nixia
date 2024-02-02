@@ -6,6 +6,7 @@ use App\DTO\TelephoneDTO;
 use App\Entity\Controle;
 use App\Entity\Employees;
 use App\Entity\Contracts;
+use App\Entity\Cdr;
 use App\Entity\Customers;
 use App\Entity\Telephone;
 use App\Entity\History;
@@ -34,9 +35,10 @@ class HomeController extends AbstractController
 
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-                    //GESTION History
+        /*############################# GESTION HISTORY  ############################# */
+
              $today = new \DateTime();
-             $todayFormatted = $today->format('Y-m-d'); // Format de la base de données
+             $todayFormatted = $today->format('Y-m-d'); 
 
              $history = $this->em->getRepository(History::class)->createQueryBuilder('h')
                         ->where('h.createdAt >= :today') // Utilisez >= pour inclure les données d'aujourd'hui et ultérieures
@@ -44,9 +46,9 @@ class HomeController extends AbstractController
                         ->getQuery()
                         ->getResult();
        
-                          //GESTION CDR
-                          $ListeInvoice = $entityManager->getRepository(Invoicesitems::class);
-                                       
+        /*############################# GESTION INVOICESITEMS  ############################# */
+
+                          $ListeInvoice = $entityManager->getRepository(Invoicesitems::class);                 
                           $query = $entityManager->createQuery(
                             'SELECT c
                             FROM App\Entity\Invoicesitems c
@@ -54,41 +56,69 @@ class HomeController extends AbstractController
                             ORDER BY c.id ASC'
                         );
                         
-                        $query->setMaxResults(20);
-                        
-                        // Exécution de la requête
+                        $query->setMaxResults(20);               
                         $results = $query->getResult();
+                        $invoiceQueryBuilder = $ListeInvoice->createQueryBuilder('i');
+                        $invoiceQueryBuilder->select('COUNT (DISTINCT i.id) AS total');
+                        $getInvoicesGenerated = $invoiceQueryBuilder->getQuery()->getResult();
+                        
+
                          
 
-           
 
-        /*Gestion total tel*/
+        /*#############################  TOTAL TELEPHONES ############################# */
+
         $TelRepository = $entityManager->getRepository(Telephone::class);
         $TelQueryBuilder = $TelRepository->createQueryBuilder('t');
         $TelQueryBuilder->select('COUNT(DISTINCT t.name) AS num');
         $TotalNums = $TelQueryBuilder->getQuery()->getResult(); 
 
-       /*Gestion total contrats*/
+       /*#############################  TOTAL CONTRATS ############################# */
+
         $ContractRepository = $entityManager->getRepository(Contracts::class);
         $ContractsQueryBuilder =  $ContractRepository->createQueryBuilder('c');
         $ContractsQueryBuilder->select('COUNT (DISTINCT c.reference) AS ref');
         $resultContractsNumber = $ContractsQueryBuilder->getQuery()->getResult();
-      
 
-        /*Gestion total customers */
+       /*#############################  TOTAL CDR  ############################# */
+
+        $CdrRepository = $entityManager->getRepository(Cdr::class);
+        $CdrQueryBuilder =  $CdrRepository->createQueryBuilder('c');
+        $CdrQueryBuilder->select('COUNT (DISTINCT c.id) AS ref');
+        $resultCdrTotal = $CdrQueryBuilder->getQuery()->getResult();
+
+        /*############################# CONTRAT EN COURS ################################*/
+
+        $getContractActivated =  $ContractsQueryBuilder->where('c.state = :stateValue')
+        ->setParameter('stateValue', 1);
+        $contractsActivated = $getContractActivated->getQuery()->getResult();
+
+        /*############################# CONTRATS TERMINER ################################*/
+        
+        $getContractDesactivated = $ContractsQueryBuilder->where('c.state = :stateValue')
+        ->setParameter('stateValue',0);
+        $ContratDesactivated = $getContractDesactivated->getQuery()->getResult();
+
+        /*############################# TOTAL CUSTOMERS ############################# */
+
          $CustomerRepository = $entityManager->getRepository(Customers::class);
          $CustomerQB = $CustomerRepository->createQueryBuilder('cm');
          $CustomerQB->select('COUNT (DISTINCT cm.dolid) AS customer');
          $resultCustomers = $CustomerQB->getQuery()->getResult();
 
-        // Le bouton dans votre template appelle getData lorsque cliqué
+       /*############################# RETURN  ############################# */
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'TotalContracts' => $resultContractsNumber[0]['ref'],
             'totalNum'=> $TotalNums[0]['num'],
             'TotalCustomers' => $resultCustomers[0]['customer'],
             'history' => $history,
-            'results' => $results
+            'results' => $results,
+            'contractsActivated' => $contractsActivated[0]['ref'],
+            'ContratDesactivated' => $ContratDesactivated[0]['ref'],
+            'CdrTotal' => $resultCdrTotal[0]['ref'],
+            'TotalInvoices' => $getInvoicesGenerated[0]['total']
           
         ]);
     }

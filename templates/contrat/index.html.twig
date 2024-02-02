@@ -83,8 +83,8 @@ body %} {% block stylesheets %}
                   <td>{{ Contract.customerid.Email }}</td>
                   <td>
                     {% if Contract.state == 1 %}
-                    <span class="badge bg-success">terminé</span>{% else %}
-                    <span class="badge bg-primary">En cours</span>{% endif %}
+                    <span class="badge bg-success">En cours</span>{% else %}
+                    <span class="badge bg-primary">Terminé</span>{% endif %}
                   </td>
                 </tr>
                 {% endfor %}
