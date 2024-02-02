@@ -1,20 +1,59 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello PdfController!{% endblock %}
-
-{% block body %}
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
+body %} {% block stylesheets %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+  form {
+    max-width: 100% !important;
+  }
+
+  form input,
+  form select {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .form-containerAssociate {
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-item {
+    width: 100%;
+    margin-bottom: 20px; /* Espacement entre les formulaires */
+  }
+
+  .form-containerAssociate .form-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-field,
+  .form-containerAssociate .form-action {
+    flex-grow: 1; /* Permet à chaque champ de grandir et de remplir l'espace disponible */
+    margin-right: 10px; /* Espacement entre les champs */
+  }
+
+  .form-containerAssociate .form-field:last-child {
+    margin-right: 0; /* Supprime la marge droite pour le dernier champ */
+  }
+
+  .form-containerAssociate .submit-btn {
+    flex-grow: 0; /* Empêche le bouton de grandir autant que les champs */
+  }
 </style>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>pdf</h1>
+  </div>
+  <!-- End Page Title -->
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Yhouston/Documents/SpaceWork/M1/Billing_Nixia/src/Controller/PdfController.php'|file_link(0) }}">src/Controller/PdfController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Yhouston/Documents/SpaceWork/M1/Billing_Nixia/templates/pdf/index.html.twig'|file_link(0) }}">templates/pdf/index.html.twig</a></code></li>
-    </ul>
-</div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12"> 
+     
+      </div>
+    </div>
+  </section>
+</main>
 {% endblock %}

@@ -35,6 +35,9 @@ class HomeController extends AbstractController
 
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        $user = $this->getUser();
+        dump($user);
         /*############################# GESTION HISTORY  ############################# */
 
              $today = new \DateTime();
