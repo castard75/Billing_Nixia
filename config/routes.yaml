@@ -1,9 +1,17 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
 
 auth:
-    path: /auth
-    methods: ['POST']
+  path: /auth
+  methods: ["POST"]
+
+app_logout:
+  path: /logout
+  methods: ["GET"]
+
+app_login_route:
+  path: /login
+  controller: App\Controller\LoginController::login

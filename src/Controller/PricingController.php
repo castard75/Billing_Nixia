@@ -189,7 +189,7 @@ class PricingController extends AbstractController
             $queryBuilder->where('c.sipTrunk = :sipTrunk')
                 ->setParameter('sipTrunk', $sipTrunk)
                 ->andWhere($queryBuilder->expr()->between('c.dateAt', ':startDate', ':endDate'))
-                ->setParameter('startDate', $lastMonthToString)
+                ->setParameter('startDate', $lastMonthToString) /*###### date ######*/
                 ->setParameter('endDate', $lastDayOfLastMonth)
                 ->select('SUM(c.price) as totalPrice');
             
