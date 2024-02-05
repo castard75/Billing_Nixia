@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Invoices
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -98,7 +99,12 @@ class Invoices
     {
         $this->invoicesitems = new ArrayCollection();
         $this->linkContractInvoices = new ArrayCollection();
-       
+        $this->createdat = new \DateTime('');
+        $this->updatedat = new \DateTime('');
+        $this->date = new \DateTime('');
+        $this->type = "0";
+        $this->transfert = 0;
+        $this->state = 0;
     }
 
     public function getId(): ?int

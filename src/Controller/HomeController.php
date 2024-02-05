@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Core\Annotation\Security;
+use Dompdf\Dompdf;
 
 class HomeController extends AbstractController
 {
@@ -203,6 +204,33 @@ class HomeController extends AbstractController
             'controls' => $controls,
         ]);
     }
+
+
+    // #[Route('/pdf/generator-{id}', name: 'app_pdf_generator')]
+    // public function generatePdf(EntityManagerInterface $entityManager): Response
+    // {
+    //     // $invoiceItem = $entityManager->getRepository(Invoicesitems::class)->find($id);
+
+    //     $data = [
+    //         // 'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/profile.png'),
+    //         'name'         => 'John Doe',
+    //         'address'      => 'USA',
+    //         'mobileNumber' => '000000000',
+    //         'email'        => 'john.doe@email.com'
+    //     ];
+
+    //     $html =  $this->renderView('pdf_generator/index.html.twig', $data);
+    //     $dompdf = new Dompdf();
+    //     $dompdf->loadHtml($html);
+    //     $dompdf->setPaper('A4', 'landscape');
+    //     $dompdf->render();
+         
+    //     return new Response (
+    //         $dompdf->stream('resume', ["Attachment" => false]),
+    //         Response::HTTP_OK,
+    //         ['Content-Type' => 'application/pdf']
+    //     );
+    // }
 
 
 
