@@ -5,23 +5,34 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Invoicesitems;
+use App\Entity\Customers;
+use App\Entity\Contracts;
 use App\Services\pdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 
 
+
 class PdfController extends AbstractController
 {
     #[Route('/pdf/generator-{id}', name: 'app_pdf_generator')]
-    public function index(): Response
+    public function index(EntityManagerInterface $em,int $id): Response
     {
-//  $Tiers = $entityManager->getRepository(Customers::class)->find($id);
+        $invoice = $em->getRepository(Invoicesitems::class)->find($id);
+       
+
+
+        if (!$invoice) {
+            throw $this->createNotFoundException('Invoice not found');
+        }
+        $ref =  $invoice ->getReference();
 
         $data = [
             // 'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/profile.png'),
             'name'         => 'John Doe',
             'address'      => 'USA',
-            'mobileNumber' => '000000000',
+            'mobileNumber' => $ref ,
             'email'        => 'john.doe@email.com'
         ];
 

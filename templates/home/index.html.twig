@@ -92,6 +92,7 @@ body %}
                       <th scope="col">Numéro</th>
                       <th scope="col">Date</th>
                       <th scope="col">Prix</th>
+                      <th scope="col">Pdf</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -115,6 +116,11 @@ body %}
                       <td>
                         <span class="badge bg-success">{{ item.ht }}</span>
                       </td>
+       <td class="pe-auto">
+                    <a href="{{ path('app_pdf_generator', { id: item.id }) }}">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                  </td>
                     </tr>
                     {% endfor %}
                   </tbody>
