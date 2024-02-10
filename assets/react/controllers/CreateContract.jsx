@@ -15,6 +15,7 @@ export default function CreateContract() {
   const { errors } = formState;
 
   const token = localStorage.getItem("token");
+
   ////---------------------Create task--------------------////
 
   const makeTask = (data) => {
@@ -24,29 +25,34 @@ export default function CreateContract() {
       return el.name == selectedCustomer;
     });
 
-    console.log(findCustomer);
+    const customerId = findCustomer.id;
+    console.log(data);
 
-    // const obj = {
-    //   title: data.title,
-    //   description: data.description,
-    //   recurrence: data.recurrence,
-    //   technicien: selectedTech,
+    const obj = {
+      referencebr: data.referencebr,
+      reference: data.reference,
+      state: parseInt(data.state),
+      totalht: parseInt(data.totalht),
+      totalttc: parseInt(data.totalttc),
+      totaltva: parseInt(data.totaltva),
+      customerid: `/api/customers/${customerId}`,
+      origineid: `/api/myconnectors/${1}`,
+    };
 
-    // };
-
-    // axios
-    //   .post("https://localhost:8000/api/tasks", obj, {
-    //     headers: {
-    //       "Content-Type": "application/ld+json",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log("Réponse du serveur :", res.data);
-    //     window.location = "/";
-    //   })
-    //   .catch((err) => {
-    //     console.error("Erreur lors de la requête :", err);
-    //   });
+    axios
+      .post("https://localhost:8000/api/contracts", obj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/ld+json",
+        },
+      })
+      .then((res) => {
+        console.log("Réponse du serveur :", res.data);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la requête :", err);
+      });
   };
 
   //--------------------------STATE-------------------------//
@@ -77,7 +83,7 @@ export default function CreateContract() {
     <>
       <button
         type="button"
-        class="btn btn-primary"
+        className="btn btn-primary"
         data-bs-toggle="modal"
         data-bs-target="#basicModal"
       >
@@ -86,7 +92,6 @@ export default function CreateContract() {
       <div
         className="modal fade"
         id="basicModal"
-        tabindex="-1"
         tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
@@ -96,28 +101,101 @@ export default function CreateContract() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Nouveau ticket
+                Nouveau Contrat
               </h5>
               <button
                 type="button"
-                className="close btn btn-secondary"
-                data-dismiss="modal"
+                class="btn-close dismiss-btn"
+                data-bs-dismiss="modal"
                 aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+              ></button>
             </div>
             <div className="modal-body">
               <form>
                 <div className="form-group">
-                  <label htmlFor="exampleFormControlInput1">TITRE </label>
+                  <label htmlFor="exampleFormControlInput1">Referencebr </label>
                   <input
-                    {...register("title", { required: true })}
+                    {...register("referencebr", { required: true })}
                     type="text"
-                    className="form-control scales"
+                    className="form-control "
                     id="exampleFormControlInput1"
                   />
-                  {errors.title && (
+                  {errors.referencebr && (
+                    <span style={{ color: "red" }}>
+                      Ce champ est obligatoire
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">Reference </label>
+                  <input
+                    {...register("reference", { required: true })}
+                    type="text"
+                    className="form-control "
+                    id="exampleFormControlInput1"
+                  />
+                  {errors.reference && (
+                    <span style={{ color: "red" }}>
+                      Ce champ est obligatoire
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">State </label>
+                  <input
+                    max="1"
+                    min="0"
+                    {...register("state", { required: true })}
+                    type="number"
+                    className="form-control "
+                    id="exampleFormControlInput1"
+                  />
+                  {errors.state && (
+                    <span style={{ color: "red" }}>
+                      Ce champ est obligatoire
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">Totalht </label>
+                  <input
+                    {...register("totalht", { required: true })}
+                    type="number"
+                    className="form-control "
+                    id="exampleFormControlInput1"
+                    min="0"
+                  />
+                  {errors.totalht && (
+                    <span style={{ color: "red" }}>
+                      Ce champ est obligatoire
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">Totalttc </label>
+                  <input
+                    {...register("totalttc", { required: true })}
+                    type="number"
+                    className="form-control "
+                    id="exampleFormControlInput1"
+                    min="0"
+                  />
+                  {errors.totalttc && (
+                    <span style={{ color: "red" }}>
+                      Ce champ est obligatoire
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleFormControlInput1">Totaltva </label>
+                  <input
+                    min="0"
+                    {...register("totaltva", { required: true })}
+                    type="number"
+                    className="form-control "
+                    id="exampleFormControlInput1"
+                  />
+                  {errors.totaltva && (
                     <span style={{ color: "red" }}>
                       Ce champ est obligatoire
                     </span>
@@ -144,21 +222,6 @@ export default function CreateContract() {
                     })}
                   </select>
                   {errors.customers && (
-                    <span style={{ color: "red" }}>
-                      Ce champ est obligatoire
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="exampleFormControlInput1">TEXTE</label>
-                  <textarea
-                    type="email"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    {...register("description", { required: true })}
-                  />
-                  {errors.description && (
                     <span style={{ color: "red" }}>
                       Ce champ est obligatoire
                     </span>

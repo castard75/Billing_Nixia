@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Contracts
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -69,6 +70,7 @@ class Contracts
     public function __construct()
     {
         $this->linkContractInvoices = new ArrayCollection();
+        $this->date = new \DateTime('now');
     }
 
 
