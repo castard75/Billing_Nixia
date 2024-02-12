@@ -96,6 +96,11 @@ export default function UsersPage() {
     console.log(name);
     console.log(email);
 
+    const obj = {
+      name: name,
+      email: email,
+    };
+
     axios
       .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
         headers: {
@@ -105,7 +110,7 @@ export default function UsersPage() {
       })
       .then((response) => {
         console.log(response.data);
-        window.location = "/";
+        window.location = "/users";
       })
       .catch((error) => {
         console.error(error);
