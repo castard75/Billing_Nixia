@@ -1,7 +1,7 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 import { months } from "../../utils/monthsList";
 
@@ -109,3 +109,9 @@ export default function StatistiqueTotal() {
     </>
   );
 }
+
+const SuspendedUpdateContract = (props) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <StatistiqueTotal />
+  </Suspense>
+);

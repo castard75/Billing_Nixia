@@ -49,7 +49,7 @@ body %} {% block stylesheets %}
         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
       </ol>
     </nav>
-            <div {{ react_component('CreateContract') }}></div>
+            {# <div {{ react_component('CreateContract') }}></div> #}
   </div>
   <!-- End Page Title -->
 
@@ -88,7 +88,8 @@ body %} {% block stylesheets %}
                     <span class="badge bg-success">En cours</span>{% else %}
                     <span class="badge bg-primary">Terminé</span>{% endif %}
                   </td>
-                       <td> <div {{ react_component('UpdateContract', {'idContract':Contract.id}) }}></div></td>
+                       {# <td> <div {{ react_component('UpdateContract',  {'idContract':Contract.id,'customerName':Contract.customerid.name}) }}></div></td> #}
+                       {# <td> <div {{ react_component('UpdateContract', {'idContract':Contract.id,'reference':Contract.reference,'name':Contract.customerid.name ,'email':Contract.customerid.Email,'state' :Contract.state  }) }}></div></td> #}
                 </tr>
                 {% endfor %}
               </tbody>
