@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,6 +26,14 @@ use App\ApiResource\State\UserCreateProcessor;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    public function __construct()
+    {
+        $this->createdat = new \DateTime('now');
+        $this->updatedat = new \DateTime('now');
+        
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,6 +53,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50)]
     private ?string $name = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdat = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedat = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deletedat = null;
+
+
 
     public function getId(): ?int
     {
@@ -126,4 +146,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getCreatedat(): ?\DateTimeInterface
+    {
+        return $this->createdat;
+    }
+
+    public function setCreatedat(\DateTimeInterface $createdat): static
+    {
+        $this->createdat = $createdat;
+
+        return $this;
+    }
+
+    public function getUpdatedat(): ?\DateTimeInterface
+    {
+        return $this->updatedat;
+    }
+
+    public function setUpdatedat(\DateTimeInterface $updatedat): static
+    {
+        $this->updatedat = $updatedat;
+
+        return $this;
+    }
+
+    public function getDeletedat(): ?\DateTimeInterface
+    {
+        return $this->deletedat;
+    }
+
+    public function setDeletedat(?\DateTimeInterface $deletedat): static
+    {
+        $this->deletedat = $deletedat;
+
+        return $this;
+    }
+
+
 }

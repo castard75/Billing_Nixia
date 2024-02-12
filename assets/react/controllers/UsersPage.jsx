@@ -17,15 +17,7 @@ export default function UsersPage() {
   const [showUpdate, setShowUpdate] = useState(false);
 
   ////----------STATE UPDATE----------////
-  const [technicien, setTechnicien] = useState("");
-  const [client, setClient] = useState("");
-  const [allClients, setAllClients] = useState([]);
-  const [allTechniciens, setAllTechniens] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [recurrence, setRecurrence] = useState();
-  const [allGroup, setAllGroup] = useState([]);
-  const [group, setGroup] = useState([]);
+
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
@@ -57,13 +49,18 @@ export default function UsersPage() {
       })
       .then((res) => {
         const data = res.data["hydra:member"];
+        const activData = data.filter((el) => {
+          return el.deletedat == null;
+        });
 
-        setList(data);
+        console.log(activData);
+
+        setList(activData);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  ////-------------UPDATE-----------------////
+  ////################################ UPDATE ################################ ////
 
   const viewDetails = (id) => {
     const findObjList = list.find((el) => el.id === id);
@@ -76,22 +73,26 @@ export default function UsersPage() {
     setShowModal(true);
   };
 
-  const handleUpdate = () => {
-    setShowUpdate(true);
-  };
-
-  ////-------------close modal------------////
+  ////################################ close modal################################ ////
   const closeModal = () => {
     setShowModal(false);
     setShowUpdate(false);
   };
 
-  ////---------------HANDLE CHANGE----------------------////
+  ////################################ HANDLE CHANGE #################################////
 
   const handleChange = (data, e) => {
     e.preventDefault();
     const name = data.name;
     const email = data.email;
+
+    ///gestion date
+    let dates = new Date();
+    const iso = dates.toISOString();
+    const hours = iso.split("T")[1].split(".")[0];
+
+    const date = iso.split("T")[0];
+    const finalDate = date + " " + hours;
 
     console.log(name);
     console.log(email);
@@ -99,6 +100,7 @@ export default function UsersPage() {
     const obj = {
       name: name,
       email: email,
+      updatedat: finalDate,
     };
 
     axios
@@ -119,43 +121,48 @@ export default function UsersPage() {
 
   ////----------------------DELETE-----------------------////
 
-  //   const handleDelete = (e, id) => {
-  //     e.preventDefault();
+  const handleDelete = (e, id) => {
+    e.preventDefault();
 
-  //     const idToDelete = id;
+    console.log(id);
 
-  //     let findItem = list.find((item) => {
-  //       return item.id == id;
-  //     });
-  //     console.log(findItem);
-  //     let dates = new Date();
-  //     const iso = dates.toISOString();
-  //     const hours = iso.split("T")[1].split(".")[0];
+    const idToDelete = id;
 
-  //     const date = iso.split("T")[0];
-  //     const finalDate = date + " " + hours;
+    let findItem = list.find((item) => {
+      return item.id == id;
+    });
 
-  //     const objToPut = {};
+    let dates = new Date();
+    const iso = dates.toISOString();
+    const hours = iso.split("T")[1].split(".")[0];
 
-  //     axios
-  //       .put(`https://localhost:8000/api/tasks/${idToDelete}`, objToPut, {
-  //         headers: {
-  //           "Content-Type": "application/ld+json",
-  //         },
-  //       })
-  //       .then((response) => {
-  //         console.log(response.data);
-  //         const newList = list.filter((element) => {
-  //           return element.id !== idToDelete;
-  //         });
+    const date = iso.split("T")[0];
+    const finalDate = date + " " + hours;
 
-  //         setList(newList);
-  //         // window.location = "/";
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   };
+    const objToPut = {
+      deletedat: finalDate,
+    };
+
+    axios
+      .put(`https://localhost:8000/api/users/${id}`, objToPut, {
+        headers: {
+          "Content-Type": "application/ld+json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        const newList = list.filter((element) => {
+          return element.id !== id;
+        });
+
+        setList(newList);
+        // window.location = "/";
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const [page, setPage] = useState(0);
   const [filterData, setFilterData] = useState([]);
@@ -259,7 +266,7 @@ export default function UsersPage() {
                               <button
                                 type="button"
                                 className="btn btn-danger"
-                                // onClick={(e) => handleDelete(e, item.id)}
+                                onClick={(e) => handleDelete(e, item.id)}
                               >
                                 <i className="bi bi-trash3-fill"></i>
                               </button>
@@ -291,7 +298,7 @@ export default function UsersPage() {
           </div>
         </div>
       </section>
-      <main id="main" class="main">
+      <main id="main" className="main">
         <div
           className={`modal fade ${showModal ? "show" : ""}`}
           id="detail"
