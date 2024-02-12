@@ -26,22 +26,19 @@ export default function UsersPage() {
   const [recurrence, setRecurrence] = useState();
   const [allGroup, setAllGroup] = useState([]);
   const [group, setGroup] = useState([]);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
 
   ///-------------Search------------///
   const [search, setSearch] = useState("");
 
   ////-------------------------REF----------------------////
 
-  const titleInputRef = useRef(null);
-  const recurrenceInputRef = useRef(null);
-  const descriptionInputRef = useRef(null);
-  const clientInputRef = useRef(null);
-  const technicienInputRef = useRef(null);
-  const groupInputRef = useRef(null);
+  const idInputRef = useRef(null);
 
   ////----------------------VALIDATION FORM------------------------////
 
-  const { register, handleSubmit, formState } = useForm({});
+  const { register, handleSubmit, formState, setValue } = useForm({});
 
   const { errors } = formState;
 
@@ -61,87 +58,59 @@ export default function UsersPage() {
       .then((res) => {
         const data = res.data["hydra:member"];
 
-        // const taskActiv = data.filter((elements) => {
-        //   return elements.deletedAt == null;
-        // });
-
         setList(data);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  ////------------------DETAILS---------------------////
+  ////-------------UPDATE-----------------////
 
   const viewDetails = (id) => {
     const findObjList = list.find((el) => el.id === id);
 
     setSelectedItem(findObjList);
 
+    setValue("name", findObjList.name);
+    setValue("email", findObjList.email);
+
     setShowModal(true);
-    setTechnicien(findObjList.technicien);
   };
 
-  ////-------------UPDATE-----------------////
   const handleUpdate = () => {
     setShowUpdate(true);
   };
 
   ////-------------close modal------------////
   const closeModal = () => {
-    // setShowModal(false);
+    setShowModal(false);
     setShowUpdate(false);
   };
 
   ////---------------HANDLE CHANGE----------------------////
 
-  //   const handleChange = (data) => {
-  //     const title = data.title;
-  //     const description = data.description;
+  const handleChange = (data, e) => {
+    e.preventDefault();
+    const name = data.name;
+    const email = data.email;
 
-  //     const recurrence = recurrenceInputRef.current.value;
-  //     const selectedTech = technicienInputRef.current.value;
-  //     const selectedClient = clientInputRef.current.value;
-  //     const selectedGroup = groupInputRef.current.value;
+    console.log(name);
+    console.log(email);
 
-  //     const findTechnicien = allTechniciens.find((el) => {
-  //       return el.name == selectedTech;
-  //     });
-
-  //     const findClient = allClients.find((el) => {
-  //       return el.name == selectedClient;
-  //     });
-
-  //     const findGroup = allGroup.find((el) => {
-  //       return el.name == selectedGroup;
-  //     });
-
-  //     const obj = {
-  //       title: title,
-  //       description: description,
-  //       recurrence: recurrence,
-  //       technicien: technicien,
-  //       client: client,
-  //       clientEmail: findClient?.email,
-  //       technicienEmail: findTechnicien?.email,
-  //       groupId: findGroup.zammadId,
-  //       group: selectedGroup,
-  //     };
-  //     console.log(obj);
-
-  //     axios
-  //       .put(`https://localhost:8000/api/tasks/${selectedItem.id}`, obj, {
-  //         headers: {
-  //           "Content-Type": "application/ld+json",
-  //         },
-  //       })
-  //       .then((response) => {
-  //         console.log(response.data);
-  //         window.location = "/";
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   };
+    axios
+      .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
+        headers: {
+          "Content-Type": "application/ld+json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        window.location = "/";
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   ////----------------------DELETE-----------------------////
 
@@ -222,8 +191,6 @@ export default function UsersPage() {
   //   cursor: "pointer",
   // };
 
-  console.log(list);
-
   return (
     <>
       <section className="vh-100 gradient-custom-2 test">
@@ -255,29 +222,24 @@ export default function UsersPage() {
                         <th scope="col">Nom</th>
                         <th scope="col">Email</th>
 
-                        <th scope="col">Actions</th>
+                        <th scope="col">Edit</th>
                         <th scope="col">Désactivé</th>
                       </tr>
                     </thead>
                     <tbody>
                       {list?.map((item) => {
                         return (
-                          <tr className="fw-normal" key={item.id}>
-                            <th>
-                              {/* <img
-                                  src="./assets/images/logo.png"
-                                  alt="avatar 1"
-                                  style={{ width: "45px", height: "auto" }}
-                                /> */}
-                              <span className="ms-2"></span>
-                            </th>
+                          <tr className="align-middle" key={item.id}>
+                            <td>
+                              <span className="ms-2">{item.name}</span>
+                            </td>
                             <td className="align-middle">
                               <span>{item.email}</span>
                             </td>
 
                             <td
                               className="align-middle"
-                              // onClick={() => viewDetails(item.id)}
+                              onClick={() => viewDetails(item.id)}
                             >
                               <button
                                 type="button"
@@ -285,7 +247,7 @@ export default function UsersPage() {
                                 data-toggle="modal"
                                 data-target="#detail"
                               >
-                                details
+                                <i className="bi bi-pencil"></i>
                               </button>
                             </td>
                             <td className="align-middle">
@@ -294,7 +256,7 @@ export default function UsersPage() {
                                 className="btn btn-danger"
                                 // onClick={(e) => handleDelete(e, item.id)}
                               >
-                                <i class="bi bi-trash3-fill"></i>
+                                <i className="bi bi-trash3-fill"></i>
                               </button>
                             </td>
                           </tr>
@@ -324,243 +286,96 @@ export default function UsersPage() {
           </div>
         </div>
       </section>
-      <div
-        className={`modal fade ${showModal ? "show" : ""}`}
-        id="detail"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="details"
-        aria-hidden={!showModal}
-        style={{ display: showModal ? "block" : "none" }}
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <div>
+      <main id="main" class="main">
+        <div
+          className={`modal fade ${showModal ? "show" : ""}`}
+          id="detail"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="details"
+          aria-hidden={!showModal}
+          style={{ display: showModal ? "block" : "none" }}
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
                 <button
                   type="button"
-                  className="btn btn-secondary"
-                  aria-label="edit"
-                  onClick={handleUpdate}
+                  className="close btn btn-secondary"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  onClick={closeModal}
                 >
-                  <span> Modifié</span>
+                  <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-
-              <button
-                type="button"
-                className="close btn btn-secondary"
-                data-dismiss="modal"
-                aria-label="Close"
-                onClick={closeModal}
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              {/* {!showUpdate ? (
-                <>
-                  <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                      <h6>Object : </h6> {selectedItem?.title}
-                    </li>
-                    <li className="list-group-item">
-                      <h6>Client : </h6> {selectedItem?.client}
-                    </li>
-                    <li className="list-group-item">
-                      <h6>Technicien : </h6> {selectedItem?.technicien}
-                    </li>
-
-                    <li className="list-group-item">
-                      <h6>Description : </h6> {selectedItem?.description}
-                    </li>
-
-                    <li className="list-group-item">
-                      <h6>GROUPE : </h6> {selectedItem?.groupZad}
-                    </li>
-
-                    <li className="list-group-item">
-                      <h6>recurrence : </h6> {selectedItem?.recurrence}
-                    </li>
-                  </ul>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={closeModal}
-                    >
-                      Annuler
-                    </button>
-                    <button type="button" className="btn btn-primary">
-                      Valider
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlSelect1">Titre</h6>
-                      <input
-                        {...register("title", { required: true })}
-                        type="text"
-                        className="form-control"
-                        id="exampleFormControlInput1"
-                        // ref={titleInputRef}
-                        defaultValue={selectedItem?.title}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.title
-                              : e.target.value;
-                          setTitle(selectedValue);
-                        }}
-                      />
-                      {errors.title && (
-                        <span style={{ color: "red" }}>
-                          Ce champ est obligatoire
-                        </span>
-                      )}
-                    </li>
-
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlSelect1">Technicien</h6>
-                      <select
-                        className="form-control"
-                        id="exampleFormControlSelect1"
-                        value={technicien}
-                        ref={technicienInputRef}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.technicien
-                              : e.target.value;
-                          setTechnicien(selectedValue);
-                        }}
-                      >
-                        {allTechniciens?.map((item) => (
-                          <option key={item.id} value={item.name}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
-                    </li>
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlSelect1">Client</h6>
-                      <select
-                        className="form-control"
-                        id="exampleFormControlSelect1"
-                        ref={clientInputRef}
-                        value={client}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.client
-                              : e.target.value;
-                          setClient(selectedValue);
-                        }}
-                      >
-                        {allClients?.map((item) => {
-                          return (
-                            <option key={item.id} value={item.name}>
-                              {item.name}{" "}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </li>
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlSelect1">Groupe</h6>
-                      <select
-                        className="form-control"
-                        id="exampleFormControlSelect1"
-                        ref={groupInputRef}
-                        value={group}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.groupId
-                              : e.target.value;
-                          setGroup(selectedValue);
-                        }}
-                      >
-                        {allGroup?.map((item) => {
-                          return (
-                            <option key={item.id} value={item.name}>
-                              {item.name}{" "}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </li>
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlInput1">Texte</h6>
-                      <textarea
-                        type="email"
-                        className="form-control"
-                        id="exampleFormControlInput1"
-                        {...register("description", { required: true })}
-                        // ref={descriptionInputRef}
-                        defaultValue={selectedItem?.description}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.description
-                              : e.target.value;
-                          setDescription(selectedValue);
-                        }}
-                      />
-                      {errors.description && (
-                        <span style={{ color: "red" }}>
-                          Ce champ est obligatoire
-                        </span>
-                      )}
-                    </li>
-
-                    <li className="list-group-item">
-                      <h6 htmlFor="exampleFormControlInput1">Récurrence</h6>
-                      <input
-                        type="number"
-                        className="form-control form-control-solid"
-                        placeholder="Choisissez le nombre de jours"
-                        min="0"
-                        max="100"
-                        ref={recurrenceInputRef}
-                        id="recurrence"
-                        defaultValue={selectedItem?.recurrence}
-                        onChange={(e) => {
-                          const selectedValue =
-                            e.target.value === undefined
-                              ? selectedItem?.recurrence
-                              : e.target.value;
-                          setRecurrence(selectedValue);
-                        }}
-                      />
-                    </li>
-                  </ul>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={closeModal}
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      type="button"
-                      className="btn "
-                      style={{ background: "#38ad69" }}
-                      onClick={handleSubmit(handleChange)}
-                    >
-                      Valider
-                    </button>
-                  </div>
-                </>
-              )} */}
+              <div className="modal-body">
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    <h6 htmlFor="exampleFormControlSelect1">Nom</h6>
+                    <input
+                      {...register("name", { required: true })}
+                      type="text"
+                      className="form-control"
+                      id="exampleFormControlInput1"
+                      onChange={(e) => {
+                        const selectedValue =
+                          e.target.value === undefined
+                            ? selectedItem?.name
+                            : e.target.value;
+                        setName(selectedValue);
+                      }}
+                    />
+                    {errors.name && (
+                      <span style={{ color: "red" }}>
+                        Ce champ est obligatoire
+                      </span>
+                    )}
+                  </li>
+                  <li className="list-group-item">
+                    <h6 htmlFor="exampleFormControlSelect1">Email</h6>
+                    <input
+                      {...register("email", { required: true })}
+                      type="text"
+                      className="form-control"
+                      id="exampleFormControlInput1"
+                      onChange={(e) => {
+                        const selectedValue =
+                          e.target.value === undefined
+                            ? selectedItem?.email
+                            : e.target.value;
+                        setEmail(selectedValue);
+                      }}
+                    />
+                    {errors.email && (
+                      <span style={{ color: "red" }}>
+                        Ce champ est obligatoire
+                      </span>
+                    )}
+                  </li>
+                </ul>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={closeModal}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    className="btn "
+                    style={{ background: "#38ad69" }}
+                    onClick={handleSubmit(handleChange)}
+                  >
+                    Valider
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
       ;
     </>
   );

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\ApiResource\DTO\UserDTO;
 use App\ApiResource\State\UserCreateProcessor;
 
@@ -18,6 +19,7 @@ use App\ApiResource\State\UserCreateProcessor;
     operations: [
         new Get(),
         new GetCollection(),
+        new Put(),
         new Post(uriTemplate: 'create/user', input: UserDto::class, processor: UserCreateProcessor::class)
     ]
 )]

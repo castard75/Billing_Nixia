@@ -31,6 +31,7 @@ class UserCreateProcessor implements ProcessorInterface
             $user = new User();
             $user->setRoles(['ROLE_USER']);
             $user->setEmail($data->getEmail());
+            $user->setName($data->getName());
             $user->setPassword(
                 $this->userPasswordHasher->hashPassword(
                     $user,

@@ -17,7 +17,7 @@ class LoginController extends AbstractController
 {
 
 
-    #[Route('/', name: 'app_login', methods: ['GET'])]
+    #[Route('/login', name: 'app_login', methods: ['GET'])]
     public function login(): Response
     {
         // You can render your login form template here if needed
