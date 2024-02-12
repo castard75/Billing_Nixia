@@ -3,20 +3,15 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import ReactPaginate from "react-paginate"; // for pagination
-
-// import { DataTable } from "primereact/datatable";
-// import { Column } from "primereact/column";
+import ReactPaginate from "react-paginate";
 
 export default function UsersPage() {
-  ////-----------------USE CONTEXT -------------------------////
-
   const [list, setList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showUpdate, setShowUpdate] = useState(false);
 
-  ////----------STATE UPDATE----------////
+  ////################################ STATE UPDATE ################################////
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -24,17 +19,13 @@ export default function UsersPage() {
   ///-------------Search------------///
   const [search, setSearch] = useState("");
 
-  ////-------------------------REF----------------------////
-
-  const idInputRef = useRef(null);
-
-  ////----------------------VALIDATION FORM------------------------////
+  ////################################ VALIDATION FORM ################################////
 
   const { register, handleSubmit, formState, setValue } = useForm({});
 
   const { errors } = formState;
 
-  ////-------------------UTILISATEUR-------------------------////
+  ////################################ UTILISATEUR ################################////
 
   const token = localStorage.getItem("token");
 
@@ -53,12 +44,16 @@ export default function UsersPage() {
           return el.deletedat == null;
         });
 
-        console.log(activData);
-
         setList(activData);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  ////################################ close modal################################ ////
+  const closeModal = () => {
+    setShowModal(false);
+    setShowUpdate(false);
+  };
 
   ////################################ UPDATE ################################ ////
 
@@ -71,12 +66,6 @@ export default function UsersPage() {
     setValue("email", findObjList.email);
 
     setShowModal(true);
-  };
-
-  ////################################ close modal################################ ////
-  const closeModal = () => {
-    setShowModal(false);
-    setShowUpdate(false);
   };
 
   ////################################ HANDLE CHANGE #################################////
@@ -93,9 +82,6 @@ export default function UsersPage() {
 
     const date = iso.split("T")[0];
     const finalDate = date + " " + hours;
-
-    console.log(name);
-    console.log(email);
 
     const obj = {
       name: name,
@@ -119,7 +105,7 @@ export default function UsersPage() {
       });
   };
 
-  ////----------------------DELETE-----------------------////
+  ////################################ DELETE ################################////
 
   const handleDelete = (e, id) => {
     e.preventDefault();
@@ -157,7 +143,6 @@ export default function UsersPage() {
         });
 
         setList(newList);
-        // window.location = "/";
       })
       .catch((error) => {
         console.error(error);
@@ -165,7 +150,7 @@ export default function UsersPage() {
   };
 
   const [page, setPage] = useState(0);
-  const [filterData, setFilterData] = useState([]);
+  const [filterData, setFilterData] = useState();
   const n = 3;
 
   useEffect(() => {
@@ -174,34 +159,7 @@ export default function UsersPage() {
         return (index >= page * n) & (index < (page + 1) * n);
       })
     );
-  }, [page]);
-
-  // const active = {
-  //   backgroundColor: "#1e50ff",
-  //   borderRadius: "50%",
-  // };
-
-  // const CustomStyles = {
-  //   listStyle: "none",
-  //   padding: "2px 12px",
-  //   height: "31.5px",
-  //   width: "31.5px",
-  //   display: "flex",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   marginTop: "2px",
-  // };
-
-  // const pagination = {
-  //   listStyle: "none",
-  //   height: "31.5px",
-  //   width: "31.5px",
-  //   display: "flex",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   marginTop: "2px",
-  //   cursor: "pointer",
-  // };
+  }, [page, list]); //depence de list car le useEffect est monter avant que lsit soit à jour
 
   return (
     <>
@@ -239,41 +197,47 @@ export default function UsersPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {list?.map((item) => {
-                        return (
-                          <tr className="align-middle" key={item.id}>
-                            <td>
-                              <span className="ms-2">{item.name}</span>
-                            </td>
-                            <td className="align-middle">
-                              <span>{item.email}</span>
-                            </td>
+                      {filterData
+                        ?.filter((item) => {
+                          return search.toLowerCase() === ""
+                            ? item
+                            : item.email.toLowerCase().includes(search);
+                        })
+                        .map((item) => {
+                          return (
+                            <tr className="align-middle" key={item.id}>
+                              <td>
+                                <span className="ms-2">{item.name}</span>
+                              </td>
+                              <td className="align-middle">
+                                <span>{item.email}</span>
+                              </td>
 
-                            <td
-                              className="align-middle"
-                              onClick={() => viewDetails(item.id)}
-                            >
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                data-toggle="modal"
-                                data-target="#detail"
+                              <td
+                                className="align-middle"
+                                onClick={() => viewDetails(item.id)}
                               >
-                                <i className="bi bi-pencil"></i>
-                              </button>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={(e) => handleDelete(e, item.id)}
-                              >
-                                <i className="bi bi-trash3-fill"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                                <button
+                                  type="button"
+                                  className="btn btn-primary"
+                                  data-toggle="modal"
+                                  data-target="#detail"
+                                >
+                                  <i className="bi bi-pencil"></i>
+                                </button>
+                              </td>
+                              <td className="align-middle">
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  onClick={(e) => handleDelete(e, item.id)}
+                                >
+                                  <i className="bi bi-trash3-fill"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                   <div
@@ -347,8 +311,10 @@ export default function UsersPage() {
                   <li className="list-group-item">
                     <h6 htmlFor="exampleFormControlSelect1">Email</h6>
                     <input
-                      {...register("email", { required: true })}
-                      type="text"
+                      {...register("email", {
+                        required: true,
+                      })}
+                      type="email"
                       className="form-control"
                       id="exampleFormControlInput1"
                       onChange={(e) => {
