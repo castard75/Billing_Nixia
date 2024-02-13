@@ -1,6 +1,45 @@
 {% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
 body %} {% block stylesheets %}
+<style>
+  form {
+    max-width: 100% !important;
+  }
 
+  form input,
+  form select {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .form-containerAssociate {
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-item {
+    width: 100%;
+    margin-bottom: 20px; /* Espacement entre les formulaires */
+  }
+
+  .form-containerAssociate .form-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form-containerAssociate .form-field,
+  .form-containerAssociate .form-action {
+    flex-grow: 1; /* Permet à chaque champ de grandir et de remplir l'espace disponible */
+    margin-right: 10px; /* Espacement entre les champs */
+  }
+
+  .form-containerAssociate .form-field:last-child {
+    margin-right: 0; /* Supprime la marge droite pour le dernier champ */
+  }
+
+  .form-containerAssociate .submit-btn {
+    flex-grow: 0; /* Empêche le bouton de grandir autant que les champs */
+  }
+</style>
 {% endblock %}
 <main id="main" class="main">
   <div class="pagetitle">
@@ -34,15 +73,13 @@ body %} {% block stylesheets %}
                     {% for form in forms %}
                     <span id="errorform_{{ loop.index }}"></span>
                     <div class="form-item">
-                      {{ form_start(form, {'attr': {'id': 'form_' ~ loop.index, 'class': 'ajax-form'
-                    }}) }}
+                      {{ form_start(form, {'attr': {'id': 'form_' ~ loop.index, 'class': 'ajax-form'}}) }}
                       <div class="form-row">
-                        {{ form_widget(form.telephone, {'attr': {'hidden': 'hidden'
-                        }}) }}
+                        {{ form_widget(form.telephone, {'attr': {'hidden': 'hidden'}}) }}
                         <div class="form-field">
                           {{ form_widget(form.telephoneAffiche) }}
                         </div>
-                        <div class="form-field">
+                        <div class="form-field" style="overflow : hidden">
                           {{ form_widget(form.contrat) }}
                         </div>
                         <div class="form-action">
