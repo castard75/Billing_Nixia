@@ -6,12 +6,14 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import swal from "sweetalert";
 import ReactPaginate from "react-paginate";
+import validator from "validator";
 
 export default function UsersPage() {
   const [list, setList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showUpdate, setShowUpdate] = useState(false);
+  const [message, setMessage] = useState("");
 
   ////################################ STATE UPDATE ################################////
 
@@ -64,66 +66,67 @@ export default function UsersPage() {
     setShowModal(true);
   };
 
-  ////################################ HANDLE CHANGE #################################////
-
-  const schemas = yup.object().shape({
-    email: yup.string().email().required(),
-  });
-
   ////################################ VALIDATION FORM ################################////
 
-  const { register, handleSubmit, formState, setValue } = useForm({
-    resolver: yupResolver(schemas),
-  });
+  const { register, handleSubmit, formState, setValue } = useForm();
 
   const { errors } = formState;
-  ////################################ emailRegex ################################////
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const isValidEmail = (email) => {
-    return emailRegex.test(email);
-  };
+  // const isValidEmail = (email) => {
+  //   return emailRegex.test(email);
+  // };
 
   ////################################ UPDATE ################################////
 
   const handleChange = (data, e) => {
-    if (!isValidEmail(data.email)) {
-      console.log("Adresse e-mail invalide");
-      return;
+    // if (!isValidEmail(data.email)) {
+    //   console.log("Adresse e-mail invalide");
+    //   return;
+    // }
+
+    if (validator.isEmail(data.email)) {
+      e.preventDefault();
+      const name = data.name;
+      const email = data.email;
+
+      ///gestion date
+      let dates = new Date();
+      const iso = dates.toISOString();
+      const hours = iso.split("T")[1].split(".")[0];
+
+      const date = iso.split("T")[0];
+      const finalDate = date + " " + hours;
+
+      console.log(email);
+      const obj = {
+        name: name,
+        email: email,
+        updatedat: finalDate,
+      };
+
+      axios
+        .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
+          headers: {
+            "Content-Type": "application/ld+json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          window.location = "/users";
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      setMessage("Veuillez entrer un email valide svp!");
+      setTimeout(() => {
+        setMessage("");
+      }, 4000);
+      return false;
     }
-    e.preventDefault();
-    const name = data.name;
-    const email = data.email;
-
-    ///gestion date
-    let dates = new Date();
-    const iso = dates.toISOString();
-    const hours = iso.split("T")[1].split(".")[0];
-
-    const date = iso.split("T")[0];
-    const finalDate = date + " " + hours;
-
-    const obj = {
-      name: name,
-      email: email,
-      updatedat: finalDate,
-    };
-
-    // axios
-    //   .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
-    //     headers: {
-    //       "Content-Type": "application/ld+json",
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     window.location = "/users";
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
   };
 
   ////################################ DELETE ################################////
@@ -309,7 +312,7 @@ export default function UsersPage() {
               <div className="modal-body">
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item">
-                    <h6 htmlFor="exampleFormControlSelect1">Nom</h6>
+                    <h6>Nom</h6>
                     <input
                       {...register("name", { required: true })}
                       type="text"
@@ -330,7 +333,7 @@ export default function UsersPage() {
                     )}
                   </li>
                   <li className="list-group-item">
-                    <h6 htmlFor="exampleFormControlSelect1">Email</h6>
+                    <h6>Email</h6>
                     <input
                       {...register("email", {
                         required: true,
@@ -348,9 +351,18 @@ export default function UsersPage() {
                     />
                     {errors.email && (
                       <span style={{ color: "red" }}>
-                        Ce champ est obligatoire
+                        Veuillez entrer un email valide svp!
                       </span>
                     )}
+                    <span
+                      style={{
+                        color: "red",
+                        display: errors.email ? "none" : "block",
+                      }}
+                      id="test"
+                    >
+                      {message}
+                    </span>
                   </li>
                 </ul>
                 <div className="modal-footer">
