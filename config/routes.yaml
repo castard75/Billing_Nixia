@@ -13,5 +13,5 @@ app_logout:
   methods: ["GET"]
 
 app_login_route:
-  path: /login
+  path: /
   controller: App\Controller\LoginController::login

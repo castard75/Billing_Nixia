@@ -74,41 +74,9 @@ body %} {% block stylesheets %}
                     <span id="errorform_{{ loop.index }}"></span>
                     <div class="form-item">
                       {{ form_start(form, {'attr': {'id': 'form_' ~ loop.index, 'class': 'ajax-form'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                      }}) }}
+                    }}) }}
                       <div class="form-row">
                         {{ form_widget(form.telephone, {'attr': {'hidden': 'hidden'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         }}) }}
                         <div class="form-field">
                           {{ form_widget(form.telephoneAffiche) }}
