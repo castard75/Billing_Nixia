@@ -2,7 +2,9 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import swal from "sweetalert";
 import ReactPaginate from "react-paginate";
 
 export default function UsersPage() {
@@ -18,12 +20,6 @@ export default function UsersPage() {
 
   ///-------------Search------------///
   const [search, setSearch] = useState("");
-
-  ////################################ VALIDATION FORM ################################////
-
-  const { register, handleSubmit, formState, setValue } = useForm({});
-
-  const { errors } = formState;
 
   ////################################ UTILISATEUR ################################////
 
@@ -70,7 +66,32 @@ export default function UsersPage() {
 
   ////################################ HANDLE CHANGE #################################////
 
+  const schemas = yup.object().shape({
+    email: yup.string().email().required(),
+  });
+
+  ////################################ VALIDATION FORM ################################////
+
+  const { register, handleSubmit, formState, setValue } = useForm({
+    resolver: yupResolver(schemas),
+  });
+
+  const { errors } = formState;
+  ////################################ emailRegex ################################////
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const isValidEmail = (email) => {
+    return emailRegex.test(email);
+  };
+
+  ////################################ UPDATE ################################////
+
   const handleChange = (data, e) => {
+    if (!isValidEmail(data.email)) {
+      console.log("Adresse e-mail invalide");
+      return;
+    }
     e.preventDefault();
     const name = data.name;
     const email = data.email;
@@ -89,20 +110,20 @@ export default function UsersPage() {
       updatedat: finalDate,
     };
 
-    axios
-      .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
-        headers: {
-          "Content-Type": "application/ld+json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        window.location = "/users";
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // axios
+    //   .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
+    //     headers: {
+    //       "Content-Type": "application/ld+json",
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     window.location = "/users";
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   ////################################ DELETE ################################////
