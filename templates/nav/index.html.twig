@@ -31,13 +31,14 @@
         <span>Associations</span>
       </a>
     </li>
-
+{% if is_granted('ROLE_ADMIN') %}
     <li class="nav-item">
       <a class="nav-link collapsed" href="{{ path('app_associate') }}">
         <i class="bi bi-card-list"></i>
         <span>Gestion des associations</span>
       </a>
     </li>
+    {% endif %}
 
     <li class="nav-item">
       <a
@@ -81,12 +82,15 @@
         <span>Statistiques</span>
       </a>
     </li>
+{% if is_granted('ROLE_ADMIN') %}
     <li class="nav-item">
-      <a class="nav-link collapsed" href="{{ path('app_users') }}">
-       <i class="bi bi-plus-circle"></i>
-        <span>Gestion utilisateurs </span>
-      </a>
+        <a class="nav-link collapsed" href="{{ path('app_users') }}">
+            <i class="bi bi-plus-circle"></i>
+            <span>Gestion utilisateurs</span>
+        </a>
     </li>
+{% endif %}
+
     
     <li class="nav-item">
       <a class="nav-link collapsed" href="{{ path('app_logout') }}">
