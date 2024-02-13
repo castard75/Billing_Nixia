@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
 import validator from "validator";
+import CreateUser from "./CreateUser";
 
 export default function UsersPage() {
   const [list, setList] = useState([]);
@@ -78,7 +79,8 @@ export default function UsersPage() {
     e.preventDefault();
     let regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]{3,}(-[A-Za-zÀ-ÖØ-öø-ÿ]+)?$/;
 
-    /*GESTION NAME*/
+    /*----------------GESTION VALIDATION NAME--------------------*/
+
     if (!regex.test(data.name)) {
       const targetNameError = document.getElementById("nameError");
 
@@ -89,6 +91,8 @@ export default function UsersPage() {
       }, 4000);
       return false;
     }
+
+    /*----------------GESTION VALIDATION EMAIL--------------------*/
 
     if (validator.isEmail(data.email)) {
       Swal.fire({
@@ -116,7 +120,8 @@ export default function UsersPage() {
           const name = data.name;
           const email = data.email;
 
-          ///gestion date
+          /*----------------GESTION DATE--------------------*/
+
           let dates = new Date();
           const iso = dates.toISOString();
           const hours = iso.split("T")[1].split(".")[0];
@@ -208,6 +213,8 @@ export default function UsersPage() {
       });
   };
 
+  ////################################ PAGINATION ################################////
+
   const [page, setPage] = useState(0);
   const [filterData, setFilterData] = useState();
   const n = 3;
@@ -218,7 +225,13 @@ export default function UsersPage() {
         return (index >= page * n) & (index < (page + 1) * n);
       })
     );
-  }, [page, list]); //depence de list car le useEffect est monter avant que lsit soit à jour
+  }, [page, list]); //depence de list car le useEffect est monter avant que list soit à jour
+
+  const customStyles = {
+    customPreviousButton: {
+      textDecoration: "none",
+    },
+  };
 
   return (
     <>
@@ -230,11 +243,11 @@ export default function UsersPage() {
               <div className="card mask-custom">
                 <div className="card-body p-4 text-white">
                   <div
-                    className=" mb-2"
-                    style={{ paddingRight: "1rem", width: "300px" }}
+                    className=" mb-2 d-flex justify-content-between "
+                    style={{ paddingRight: "1rem" }}
                   >
+                    {" "}
                     <i className="ki-outline ki-magnifier fs-3 text-primary position-absolute top-50 translate-middle ms-9"></i>
-
                     <input
                       style={{ paddingRight: "1rem", width: "200px" }}
                       type="text"
@@ -244,7 +257,9 @@ export default function UsersPage() {
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Recherche"
                     />
+                    <CreateUser />
                   </div>
+
                   <table className="table text-white mb-0">
                     <thead>
                       <tr>
@@ -252,7 +267,7 @@ export default function UsersPage() {
                         <th scope="col">Email</th>
 
                         <th scope="col">Edit</th>
-                        <th scope="col">Désactivé</th>
+                        <th scope="col">Désactiver</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -260,7 +275,7 @@ export default function UsersPage() {
                         ?.filter((item) => {
                           return search.toLowerCase() === ""
                             ? item
-                            : item.email.toLowerCase().includes(search);
+                            : item.name.toLowerCase().includes(search);
                         })
                         .map((item) => {
                           return (
@@ -309,10 +324,21 @@ export default function UsersPage() {
                       onPageChange={(event) => setPage(event.selected)}
                       pageCount={Math.ceil(list.length / n)}
                       breakLabel="..."
-                      previousLabel={"précédent"}
-                      nextLabel={"suivant"}
+                      previousLabel={
+                        <i
+                          class="bi bi-arrow-left-circle"
+                          style={{ fontSize: "20px" }}
+                        ></i>
+                      }
+                      nextLabel={
+                        <i
+                          class="bi bi-arrow-right-circle"
+                          style={{ fontSize: "20px" }}
+                        ></i>
+                      }
                       marginPagesDisplayed={2}
                       nextClassName={"item  "}
+                      previousClassName={customStyles.customPreviousButton}
                     />
                   </div>
                 </div>

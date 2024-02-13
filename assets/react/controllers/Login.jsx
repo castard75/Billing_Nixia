@@ -45,7 +45,6 @@ export default function Login() {
             <a
               href="index.html"
               className="logo d-flex align-items-center w-auto "
-              // style={{ color: "red" }}
             >
               <span className="d-none d-lg-block">Nixia Billing</span>
             </a>

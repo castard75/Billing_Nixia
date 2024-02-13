@@ -17,10 +17,10 @@ class LoginController extends AbstractController
 {
 
 
-    #[Route('/login', name: 'app_login', methods: ['GET'])]
+    #[Route('/', name: 'app_login', methods: ['GET'])]
     public function login(): Response
     {
-        // You can render your login form template here if needed
+      
         return $this->render('login/index.html.twig');
     }
 }
