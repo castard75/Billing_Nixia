@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
 import validator from "validator";
 
@@ -66,60 +66,95 @@ export default function UsersPage() {
     setShowModal(true);
   };
 
-  ////################################ VALIDATION FORM ################################////
+  ////################################ USEFORM ################################////
 
   const { register, handleSubmit, formState, setValue } = useForm();
 
   const { errors } = formState;
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  // const isValidEmail = (email) => {
-  //   return emailRegex.test(email);
-  // };
-
   ////################################ UPDATE ################################////
 
   const handleChange = (data, e) => {
-    // if (!isValidEmail(data.email)) {
-    //   console.log("Adresse e-mail invalide");
-    //   return;
-    // }
+    e.preventDefault();
+    let regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]{3,}(-[A-Za-zÀ-ÖØ-öø-ÿ]+)?$/;
+
+    /*GESTION NAME*/
+    if (!regex.test(data.name)) {
+      const targetNameError = document.getElementById("nameError");
+
+      targetNameError.innerHTML = `Veuillez entrez un nom valide svp`;
+
+      setTimeout(() => {
+        targetNameError.innerHTML = ``;
+      }, 4000);
+      return false;
+    }
 
     if (validator.isEmail(data.email)) {
-      e.preventDefault();
-      const name = data.name;
-      const email = data.email;
+      Swal.fire({
+        title: "Voulez-vous valider l'opération ?",
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Oui",
+        denyButtonText: "Non",
+        customClass: {
+          actions: "my-actions",
+          cancelButton: "order-1 right-gap",
+          confirmButton: "order-2",
+          denyButton: "order-3",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Utilisateur modifié!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
 
-      ///gestion date
-      let dates = new Date();
-      const iso = dates.toISOString();
-      const hours = iso.split("T")[1].split(".")[0];
+          const name = data.name;
+          const email = data.email;
 
-      const date = iso.split("T")[0];
-      const finalDate = date + " " + hours;
+          ///gestion date
+          let dates = new Date();
+          const iso = dates.toISOString();
+          const hours = iso.split("T")[1].split(".")[0];
 
-      console.log(email);
-      const obj = {
-        name: name,
-        email: email,
-        updatedat: finalDate,
-      };
+          const date = iso.split("T")[0];
+          const finalDate = date + " " + hours;
 
-      axios
-        .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
-          headers: {
-            "Content-Type": "application/ld+json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          window.location = "/users";
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          const obj = {
+            name: name,
+            email: email,
+            updatedat: finalDate,
+          };
+
+          setShowModal(false);
+          axios
+            .put(`https://localhost:8000/api/users/${selectedItem.id}`, obj, {
+              headers: {
+                "Content-Type": "application/ld+json",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((response) => {
+              // console.log(response.data);
+              window.location = "/users";
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Changement non éffectuer",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
     } else {
       setMessage("Veuillez entrer un email valide svp!");
       setTimeout(() => {
@@ -285,109 +320,122 @@ export default function UsersPage() {
             </div>
           </div>
         </div>
-      </section>
-      <main id="main" className="main">
-        <div
-          className={`modal fade ${showModal ? "show" : ""}`}
-          id="detail"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="details"
-          aria-hidden={!showModal}
-          style={{ display: showModal ? "block" : "none" }}
+
+        <main
+          id="main"
+          className="main d-flex justify-content-center align-items-center"
         >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button
-                  type="button"
-                  className="close btn btn-secondary"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                  onClick={closeModal}
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item">
-                    <h6>Nom</h6>
-                    <input
-                      {...register("name", { required: true })}
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      onChange={(e) => {
-                        const selectedValue =
-                          e.target.value === undefined
-                            ? selectedItem?.name
-                            : e.target.value;
-                        setName(selectedValue);
-                      }}
-                    />
-                    {errors.name && (
-                      <span style={{ color: "red" }}>
-                        Ce champ est obligatoire
-                      </span>
-                    )}
-                  </li>
-                  <li className="list-group-item">
-                    <h6>Email</h6>
-                    <input
-                      {...register("email", {
-                        required: true,
-                      })}
-                      type="email"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      onChange={(e) => {
-                        const selectedValue =
-                          e.target.value === undefined
-                            ? selectedItem?.email
-                            : e.target.value;
-                        setEmail(selectedValue);
-                      }}
-                    />
-                    {errors.email && (
-                      <span style={{ color: "red" }}>
-                        Veuillez entrer un email valide svp!
-                      </span>
-                    )}
-                    <span
-                      style={{
-                        color: "red",
-                        display: errors.email ? "none" : "block",
-                      }}
-                      id="test"
-                    >
-                      {message}
-                    </span>
-                  </li>
-                </ul>
-                <div className="modal-footer">
+          <div
+            className={`modal fade  ${showModal ? "show" : ""}`}
+            id="detail"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="details"
+            aria-hidden={!showModal}
+            style={{ display: showModal ? "block" : "none" }}
+          >
+            <div
+              className="modal-dialog main d-flex justify-content-center align-items-center"
+              role="document"
+            >
+              <div className="modal-content">
+                <div className="modal-header">
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="close btn btn-secondary"
+                    data-dismiss="modal"
+                    aria-label="Close"
                     onClick={closeModal}
                   >
-                    Annuler
+                    <span aria-hidden="true">&times;</span>
                   </button>
-                  <button
-                    type="button"
-                    className="btn "
-                    style={{ background: "#38ad69" }}
-                    onClick={handleSubmit(handleChange)}
-                  >
-                    Valider
-                  </button>
+                </div>
+                <div className="modal-body">
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item">
+                      <h6>Nom</h6>
+                      <input
+                        {...register("name", { required: true })}
+                        type="text"
+                        className="form-control"
+                        id="exampleFormControlInput1"
+                        onChange={(e) => {
+                          const selectedValue =
+                            e.target.value === undefined
+                              ? selectedItem?.name
+                              : e.target.value;
+                          setName(selectedValue);
+                        }}
+                      />
+                      {errors.name && (
+                        <span style={{ color: "red" }}>
+                          Veuillez entrez un nom valide svp
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          color: "red",
+                          display: errors.name ? "none" : "block",
+                        }}
+                        id="nameError"
+                      ></span>
+                    </li>
+                    <li className="list-group-item">
+                      <h6>Email</h6>
+                      <input
+                        {...register("email", {
+                          required: true,
+                        })}
+                        type="email"
+                        className="form-control"
+                        id="exampleFormControlInput1"
+                        onChange={(e) => {
+                          const selectedValue =
+                            e.target.value === undefined
+                              ? selectedItem?.email
+                              : e.target.value;
+                          setEmail(selectedValue);
+                        }}
+                      />
+                      {errors.email && (
+                        <span style={{ color: "red" }}>
+                          Veuillez entrer un email valide svp!
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          color: "red",
+                          display: errors.email ? "none" : "block",
+                        }}
+                        id="test"
+                      >
+                        {message}
+                      </span>
+                    </li>
+                  </ul>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={closeModal}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="button"
+                      className="btn "
+                      style={{ background: "#38ad69" }}
+                      onClick={handleSubmit(handleChange)}
+                    >
+                      Valider
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-      ;
+        </main>
+      </section>
     </>
   );
 }
