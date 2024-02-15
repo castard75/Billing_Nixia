@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\ApiResource\DTO\UserDTO;
 use App\ApiResource\State\UserCreateProcessor;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -39,27 +40,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Email(
+        message: 'votre email {{ value }} est pas valide.',
+    )]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[ORM\Column]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
+    #[Assert\PasswordStrength]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: 'Your name cannot contain a number',
+    )]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdat = null;
+    
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedat = null;
 
