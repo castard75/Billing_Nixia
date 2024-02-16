@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MyconnectorsRepository::class)]
 #[ApiResource]
@@ -18,27 +19,35 @@ class Myconnectors
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $label = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $url = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $login = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $password = null;
 
+    #[Assert\Type('integer')] 
     #[ORM\Column(nullable: true)]
     private ?int $connectorid = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $createdat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $updatedat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true )]
     private ?\DateTimeInterface $deletedat = null;
 

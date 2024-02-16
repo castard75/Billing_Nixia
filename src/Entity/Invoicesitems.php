@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoicesitemsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InvoicesitemsRepository::class)]
 #[ApiResource]
@@ -23,30 +24,38 @@ class Invoicesitems
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $itempriceId = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $specialcode = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $rang = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $des = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $quantity = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $unite = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $supplierpriceId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $reference = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
@@ -71,9 +80,11 @@ class Invoicesitems
     private ?float $marge = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $modePrice = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $typeRemise = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoicesitems')]

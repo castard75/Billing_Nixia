@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TelephoneRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TelephoneRepository::class)]
 #[ApiResource]
@@ -23,45 +24,90 @@ class Telephone
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Type('integer')] 
     #[ORM\Column(nullable: true)]
     private ?int $dolid = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $name = null;
 
+    #[Assert\Length(
+        
+        max: 150,
+        maxMessage: 'La longueur ne doit pas dépasser 150 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $trprincipal = null;
 
+    #[Assert\Length(
+        
+        max: 150,
+        maxMessage: 'La longueur ne doit pas dépasser 150 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $trsecondaire = null;
 
+    #[Assert\Length(
+        
+        max: 150,
+        maxMessage: 'La longueur ne doit pas dépasser 150 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $codesite = null;
 
+    #[Assert\Length(
+        
+        max: 150,
+        maxMessage: 'La longueur ne doit pas dépasser 150 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $adresseip = null;
 
+    #[Assert\Length(
+        
+        max: 50,
+        maxMessage: 'La longueur ne doit pas dépasser 50 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $reference = null;
 
+    #[Assert\PositiveOrZero]
+    #[Assert\Type('integer')] 
     #[ORM\Column(nullable: true,options: ['default' => 1] )]
     private ?int $status = 1;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $createdat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $updatedat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedat = null;
 
+    #[Assert\Length(
+        
+        min: 1,
+        mminMessage: 'La longueur ne doit pas minimum 1 characteres',
+    )]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $transfert = null;
 
+    
     #[ORM\ManyToOne]
     private ?Customers $customerid = null;
 
+    #[Assert\Type('integer')] 
     #[ORM\Column(nullable: true, options: ['default' => 1] )]
     private ?int $niveau = 1;
 
@@ -71,12 +117,15 @@ class Telephone
     #[ORM\ManyToOne]
     private ?Myconnectors $origineid = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $startserviceat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $outserviceat = null;
 
+    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endserviceat = null;
     

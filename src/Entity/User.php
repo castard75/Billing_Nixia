@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Assert\Email(
-        message: 'votre email {{ value }} est pas valide.',
+        message: 'votre email n\'est pas valide.',
     )]
     #[Assert\NotNull]
     #[Assert\NotBlank]
@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Regex(
         pattern: '/\d/',
         match: false,
-        message: 'Your name cannot contain a number',
+        message: 'Le nom ne doit pas contenir a chiffre',
     )]
     #[Assert\NotNull]
     #[Assert\NotBlank]
