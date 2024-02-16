@@ -6,6 +6,9 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TelephoneRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Contracts;
+use App\Entity\Customers;
+use App\Entity\Myconnectors;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TelephoneRepository::class)]
@@ -90,8 +93,9 @@ class Telephone
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true,options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeInterface $updatedat = null;
 
-    #[Assert\DateTime]
+    
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $deletedat = null;
 
     #[Assert\Length(
@@ -105,6 +109,7 @@ class Telephone
 
     
     #[ORM\ManyToOne]
+    #[Assert\Type(Customers::class)]
     private ?Customers $customerid = null;
 
     #[Assert\Type('integer')] 
@@ -112,9 +117,11 @@ class Telephone
     private ?int $niveau = 1;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Contracts::class)]
     private ?Contracts $contratid = null;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Myconnectors::class)]
     private ?Myconnectors $origineid = null;
 
     #[Assert\DateTime]

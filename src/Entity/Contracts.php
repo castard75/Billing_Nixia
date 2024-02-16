@@ -8,7 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Customers;
+use App\Entity\Myconnectors;
 use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContractsRepository::class)]
 #[ApiResource]
@@ -21,48 +24,63 @@ class Contracts
     private ?int $id = null;
 
     #[ORM\Column(length: 200, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $referencebr = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $reference = null;
 
     #[ORM\Column(length: 25, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $refext = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $dolid = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $state = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\Date]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')]
     private ?float $totalht = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')]
     private ?float $totalttc = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')]
     private ?float $totaltva = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $deletedat = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $notepublic = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $noteprive = null;
 
     #[ORM\Column(length: 1, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $transfert = null;
 
     #[ORM\ManyToOne(inversedBy: 'contracts')]
+    #[Assert\Type(Customers::class)]
     private ?Customers $customerid = null;
 
     #[ORM\ManyToOne(inversedBy: 'contracts')]
+    #[Assert\Type(Myconnectors::class)]
     private ?Myconnectors $origineid = null;
 
     #[ORM\OneToMany(mappedBy: 'contractid', targetEntity: LinkContractInvoice::class)]

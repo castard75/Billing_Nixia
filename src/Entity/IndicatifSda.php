@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IndicatifSdaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: IndicatifSdaRepository::class)]
 class IndicatifSda
@@ -14,21 +15,27 @@ class IndicatifSda
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $label = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\Type('string')]
     private ?string $codeIso = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
     private ?string $zone = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
     private ?string $indicatif = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $formatNum = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $prefixe = null;
 
     public function getId(): ?int

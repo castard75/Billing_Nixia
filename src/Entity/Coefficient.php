@@ -16,6 +16,7 @@ class Coefficient
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\Type('integer')]
     private ?int $coefficient = null;
 
     public function getId(): ?int

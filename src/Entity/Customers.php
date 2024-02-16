@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Myconnectors;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CustomersRepository::class)]
 #[ApiResource]
@@ -25,105 +27,138 @@ class Customers
     private ?int $civility = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $name = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $reference = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $referencesupplier = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $siren = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $additionaladdress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $email = null;
 
     #[ORM\Column(length: 45, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $fixphone = null;
 
     #[ORM\Column(length: 45, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $mobilephone = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $cityid = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 250, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $namecity = null;
 
     #[ORM\Column(nullable: true, options: ['default' => 181])]
+    #[Assert\Type('integer')]
     private ?int $countryid = 181;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $customertypeid = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $companyid = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $conditionreglement = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $modereglement = null;
 
     #[ORM\Column(nullable: true, options: ['default' => 1])]
+    #[Assert\Type('integer')]
     private ?int $status = null;
 
     #[ORM\Column(nullable: true, options: ['default' => 1])]
+    #[Assert\Type('integer')]
     private ?int $state = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $codecompta = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true,options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $createdat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true,options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updatedat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $deletedat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $customerstate = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $supplierstate = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $classe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $datecustomer = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $dateupdatecustomer = null;
 
     #[ORM\Column(length: 1, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $transfert = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $pricelevel = null;
 
     #[ORM\OneToMany(mappedBy: 'customerid', targetEntity: Contracts::class)]
     private Collection $contracts;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
+    #[Assert\Type(Myconnectors::class)]
     private ?Myconnectors $origineid = null;
 
     #[ORM\OneToMany(mappedBy: 'customerid', targetEntity: Invoices::class)]

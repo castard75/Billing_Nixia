@@ -5,9 +5,11 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoicesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Myconnectors;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InvoicesRepository::class)]
 #[ApiResource]
@@ -20,72 +22,95 @@ class Invoices
     private ?int $id = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $referencebr = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $reference = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $refext = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $state = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $dolid = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\Date]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\Date]
     private ?\DateTimeInterface $datelimit = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')] 
     private ?int $conditions = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $totalht = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $totalttc = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $totaltva = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $topay = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $createdat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updatedat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $deletedat = null;
 
     #[ORM\Column(nullable: true,options: ['default' => 1])]
+    #[Assert\Type('integer')] 
     private ?int $mode = 1;
 
     #[ORM\Column(length: 250, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $message = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $notepublic = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[Assert\Type(Myconnectors::class)]
     private ?Myconnectors $origineid = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $noteprive = null;
 
     #[ORM\Column(length: 1, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $type = null;
 
     #[ORM\Column(length: 1, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $transfert = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[Assert\Type(Customers::class)]
     private ?Customers $customerid = null;
 
     #[ORM\OneToMany(mappedBy: 'invoiceid', targetEntity: Invoicesitems::class)]

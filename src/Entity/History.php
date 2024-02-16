@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\HistoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HistoryRepository::class)]
 #[ApiResource]
@@ -23,12 +24,15 @@ class History
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int

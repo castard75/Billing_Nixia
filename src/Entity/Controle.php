@@ -6,6 +6,10 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ControleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Customers;
+use App\Entity\Contracts;
+use App\Entity\Myconnectors;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ControleRepository::class)]
 #[ApiResource]
@@ -25,63 +29,83 @@ class Controle
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $dolid = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $name = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $trprincipal = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $trsecondaire = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $codesite = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $adresseip = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $reference = null;
 
     #[ORM\Column(nullable: true ,options: ['default' => 1] )]
+    #[Assert\Type('integer')]
     private ?int $status = 1;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $createdat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true ,options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $updatedat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $deletedat = null;
 
     #[ORM\Column(length: 1, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $transfert = null;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Customers::class)]
     private ?Customers $customerid = null;
 
     #[ORM\Column(nullable: true ,options: ['default' => 1])]
+    #[Assert\Type('integer')]
     private ?int $niveau = 1;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Contracts::class)]
     private ?Contracts $contratid = null;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Telephone::class)]
     private ?Telephone $telephoneid = null;
 
     #[ORM\ManyToOne]
+    #[Assert\Type(Myconnectors::class)]
     private ?Myconnectors $origineid = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $startserviceat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $outserviceat = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $endserviceat = null;
 
     public function getId(): ?int

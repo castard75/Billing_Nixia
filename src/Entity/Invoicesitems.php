@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Invoices;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoicesitemsRepository;
 use Doctrine\DBAL\Types\Types;
@@ -59,24 +59,31 @@ class Invoicesitems
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $ht = null;
 
     #[ORM\Column]
+    #[Assert\Type('float')] 
     private ?float $htachat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $ttc = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $tva = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $tauxremise = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')] 
     private ?float $tauxtva = null;
 
     #[ORM\Column]
+    #[Assert\Type('float')] 
     private ?float $marge = null;
 
     #[ORM\Column(nullable: true)]
@@ -88,9 +95,11 @@ class Invoicesitems
     private ?int $typeRemise = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoicesitems')]
+    #[Assert\Type(Invoices::class)]
     private ?Invoices $invoiceid = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\DateTime]
     private ?\DateTimeInterface $createdat = null;
 
     public function getId(): ?int

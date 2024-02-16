@@ -14,57 +14,74 @@ class Cdr
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\Type('integer')]
     private ?int $sipTrunk = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $caller = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $called = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $dateAt = null;
 
     #[ORM\Column]
+    #[Assert\Type('float')]
     private ?float $price = null;
 
     #[ORM\Column]
+    #[Assert\Type('integer')]
     private ?int $type = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $devise = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $origin = null;
 
     #[ORM\Column]
+    #[Assert\Type('integer')]
     private ?int $originId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $anomaly = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $comment = null;
 
     #[ORM\Column]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\DateTime]
     private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type('string')]
     private ?string $iso = null;
 
     #[ORM\Column(length: 1)]
+    #[Assert\Type('string')]
     private ?string $status = null;
 
     #[ORM\Column(length: 1)]
+    #[Assert\Type('string')]
     private ?string $activate = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $etat = null;
 
     public function getId(): ?int
