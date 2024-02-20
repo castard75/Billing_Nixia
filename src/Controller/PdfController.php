@@ -27,16 +27,20 @@ class PdfController extends AbstractController
             throw $this->createNotFoundException('Invoice not found');
         }
         $ref =  $invoice ->getReference();
+        $customer = $invoice->getInvoiceid()->getCustomerid();
+        $customerAddress =  $customer->getAddress();
+        $customerName = $customer->getName();
+        $customerEmail = $customer->getEmail();
 
         $data = [
             // 'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/profile.png'),
-            'name'         => 'John Doe',
-            'address'      => 'USA',
+            'name'         => $customerName,
+            'address'      => $customerAddress,
             'mobileNumber' => $ref ,
-            'email'        => 'john.doe@email.com'
+            'email'        => $customerEmail
         ];
 
-        $html =  $this->renderView('pdf_generator/index.html.twig', $data);
+        $html =  $this->renderView('pdf_generator/index.html.twig', [ "data" => $data]);
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'landscape');

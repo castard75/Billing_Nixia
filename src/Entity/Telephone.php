@@ -101,7 +101,7 @@ class Telephone
     #[Assert\Length(
         
         min: 1,
-        mminMessage: 'La longueur ne doit pas minimum 1 characteres',
+        minMessage: 'La longueur ne doit pas minimum 1 characteres',
     )]
     #[Assert\Type('string')]
     #[ORM\Column(length: 1, nullable: true)]

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 import { months } from "../../utils/monthsList";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default function StatistiqueTotal() {
   /*######################## STATES ########################*/
@@ -97,21 +98,17 @@ export default function StatistiqueTotal() {
         setWatchInvoiceItems(invoicesitems);
         setLoading(true);
       });
-  }, []);
+  }, [initStats]);
 
   return (
     <>
-      {loading ? (
-        <div style={{ width: "800px" }}>
-          <Bar data={chartDatas} />
-        </div>
-      ) : null}
+      <ErrorBoundary fallback={<div>Quelque chose n'a pas fonctionné</div>}>
+        {loading ? (
+          <div style={{ width: "800px" }}>
+            <Bar data={chartDatas} />
+          </div>
+        ) : null}
+      </ErrorBoundary>
     </>
   );
 }
-
-const SuspendedUpdateContract = (props) => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <StatistiqueTotal />
-  </Suspense>
-);
