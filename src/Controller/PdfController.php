@@ -31,13 +31,20 @@ class PdfController extends AbstractController
         $customerAddress =  $customer->getAddress();
         $customerName = $customer->getName();
         $customerEmail = $customer->getEmail();
+        $customerTotal = $invoice->getHt();
+        $dateInvoice = $invoice->getCreatedat();
+        $taxe = 25.3;
 
         $data = [
             // 'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/profile.png'),
             'name'         => $customerName,
             'address'      => $customerAddress,
             'mobileNumber' => $ref ,
-            'email'        => $customerEmail
+            'email'        => $customerEmail,
+            'taxe' => $taxe,
+            'total' => $customerTotal,
+            'dateInvoice' => $dateInvoice,          
+            'logo' => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/assets/img/nixia.png'),
         ];
 
         $html =  $this->renderView('pdf_generator/index.html.twig', [ "data" => $data]);
@@ -51,6 +58,18 @@ class PdfController extends AbstractController
             Response::HTTP_OK,
             ['Content-Type' => 'application/pdf']
         );
+    }
+
+    private function imageToBase64($path)
+    {
+        if (file_exists($path)) {
+            $data = file_get_contents($path);
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        } else {
+            $base64 = null;
+        }
+        return $base64;
     }
 
     

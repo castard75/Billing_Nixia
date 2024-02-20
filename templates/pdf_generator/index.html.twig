@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Aloha!</title>
+<title>Facture</title>
 
 <style type="text/css">
     * {
@@ -23,6 +23,22 @@
         display: inline-block;
     width: 100px;
     }
+    img {
+       width : 140px;
+       height : 140px;
+    }
+
+    .sizing{
+      font-size : 13px;
+    }
+
+    .date {
+      margin-top : 10px;
+      font-size : 13px;
+  
+    }
+
+
 </style>
 
 </head>
@@ -30,15 +46,17 @@
 
   <table width="100%">
     <tr>
-        <td valign="top"><img src="{{ asset('img/nom_de_votre_image.jpg') }}" alt="Description de l'image">
-</td>
+        <td valign="top"><img  src={{data.logo}} alt="logo nixia">
+    </td>
         <td align="right">
             <h3>{{ data.name }}</h3>
             <pre>
                
-                <strong> <span class="alignText">Addresse : </span></strong> {{data.address}}        
-                <strong> Téléphone : </strong> {{data.mobileNumber}} 
-                <strong> Téléphone : </strong> {{data.email}}
+               <span class="sizing"> <strong> Addresse : </strong> {{data.address}} </span>    
+
+               <span class="sizing"> <strong> Téléphone : </strong> {{data.mobileNumber}} </span>  
+
+                <span class="sizing"> <strong> Email : </strong> {{data.email}}</span>  
                 
             </pre>
         </td>
@@ -46,13 +64,10 @@
 
   </table>
 
-  <table width="100%">
-    {# <tr>
-        <td><strong>From:</strong> Linblum - Barrio teatral</td>
-        <td><strong>To:</strong> Linblum - Barrio Comercial</td>
-    </tr> #}
+  {# <table width="100%">
 
-  </table>
+
+  </table> #}
 
   <br/>
 
@@ -60,54 +75,61 @@
     <thead style="background-color: lightgray;">
       <tr>
         <th>#</th>
-        <th>Description</th>
-        <th>Quantité</th>
-        <th>Prix Unitaire$</th>
-        <th>Total $</th>
+        <th class="sizing">Description</th>
+        <th class="sizing">Quantité</th>
+        <th class="sizing">Prix Unitaire$</th>
+        <th class="sizing">Total $</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <th scope="row">1</th>
-        <td>Playstation IV - Black</td>
-        <td align="right">1</td>
-        <td align="right">1400.00</td>
-        <td align="right">1400.00</td>
+        <th scope="row" class="sizing">1</th>
+        <td class="sizing" class="sizing">Consommation mensuel</td>
+        <td align="right" class="sizing">1</td>
+      <td align="right" class="sizing"> 0.25 </td> 
+            <td align="right" class="sizing"> {{data.total}} </td> 
       </tr>
-      <tr>
-          <th scope="row">1</th>
-          <td>Metal Gear Solid - Phantom</td>
-          <td align="right">1</td>
-          <td align="right">105.00</td>
-          <td align="right">105.00</td>
-      </tr>
-      <tr>
-          <th scope="row">1</th>
-          <td>Final Fantasy XV - Game</td>
-          <td align="right">1</td>
-          <td align="right">130.00</td>
-          <td align="right">130.00</td>
-      </tr>
+
     </tbody>
 
     <tfoot>
         <tr>
-            <td colspan="3"></td>
-            <td align="right">Subtotal $</td>
-            <td align="right">1635.00</td>
+            <td colspan="3" class="sizing"></td>
+            <td align="right" class="sizing">Total hors taxe $</td>
+            <td align="right" class="sizing">{{data.total}}</td>
         </tr>
         <tr>
-            <td colspan="3"></td>
-            <td align="right">Tax $</td>
-            <td align="right">294.3</td>
+            <td colspan="3" class="sizing"></td>
+            <td align="right" class="sizing">Tax $</td>
+            <td align="right" class="sizing">25.3</td>
         </tr>
         <tr>
-            <td colspan="3"></td>
-            <td align="right">Total $</td>
-            <td align="right" class="gray">$ 1929.3</td>
+            <td colspan="3" class="sizing"></td>
+            <td align="right" class="sizing">Total $</td>
+            <td align="right" class="gray sizing">{{data.total + data.taxe}}</td>
+        
         </tr>
+
     </tfoot>
+   
   </table>
+    <table width="100%">
+    <tr>
+        <td valign="top"><img   alt="logo nixia">
+    </td>
+   
+        <td align="right">
+             <pre>
+               
+               <span class="sizing">  Facture éditée le :  {{data.dateInvoice|date("d/m/Y")}} </span>    
+
+                
+             </pre>
+        </td>
+   
+    </tr>
+  </table>
+
 
 </body>
 </html>
