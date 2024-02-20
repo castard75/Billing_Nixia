@@ -1,9 +1,11 @@
 <?php
-
+//  Impossibilité d'envoyé un mot de passe hashé depuis react donc j'ai mis en place un UserDTO qui récupère les données envoyé depuis react et pour créé un nouvel utilisateur,
+//  dans cette classe je crée des propriété qui recoivent la data qui sera initialié dans UserCreateProcessor 
 namespace App\ApiResource\DTO;
 
 class UserDTO
 {
+    
     private ?string $email = null;
     private ?string $password = null;
     private ?string $name = null;
