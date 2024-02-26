@@ -131,7 +131,11 @@ class HomeController extends AbstractController
     #[Route('/associate', name: 'app_associate')]
     public function associate(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
- 
+    /* Dans la boucle pour chaque telephone je crée un objet dto avec un numéro de telephone initialisé, pour crée un formulaire
+    .Parcontre les contrats seront totalement retourné dans un Select ce qui permet de les liés à un numéros.
+    j'appel la méthode createForm() pour crée le formulaire puis la soumission je cherche l'id du telephone et s'il est déja lié dans contrôle je met une date de fin dans le cas contraire j'initialise une nouvelle ligne dans la table.
+    Quand la liaison à été crée avec succès je crée un évenement via la table History qui permet d'affiché dans le front un message dans la partie 'Activité récentes"
+    */        
 
 
         $telephones = $entityManager->getRepository(Telephone::class)->findAll();
@@ -139,9 +143,9 @@ class HomeController extends AbstractController
 
         $forms = [];
         foreach ($telephones as $telephone) {
-            //Pour chaque telephone je crée un objet dto avec un numéro de telephone initialisé, pour crée le formulaire.
-            $dto = (new TelephoneDTO())->setTelephone($telephone);         //les telephone sont mis a jour, les contrats seront bouclés depuis TelephoneDTOType
-            $form = $this->createForm(TelephoneDTOType::class, $dto);     //Creation des formulaire a partir de l'objet dto
+
+            $dto = (new TelephoneDTO())->setTelephone($telephone); 
+            $form = $this->createForm(TelephoneDTOType::class, $dto);     
             $form->handleRequest($request); 
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -196,7 +200,7 @@ class HomeController extends AbstractController
     #[Route('/liaison', name: 'app_liaison')]
     public function liaison(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
     {
-       
+       /* Un controller liaison à pour but d'afficher toute les liaisons crée histoire d'avoir une vue d'ensemble sur les liaisons éffectuées */
         $controls = $entityManager->getRepository(Controle::class)->findBy([], ['id' => 'DESC']);
         return $this->render('home/liaison.html.twig', [
             'controller_name' => 'HomeController',
@@ -206,31 +210,6 @@ class HomeController extends AbstractController
     }
 
 
-    // #[Route('/pdf/generator-{id}', name: 'app_pdf_generator')]
-    // public function generatePdf(EntityManagerInterface $entityManager): Response
-    // {
-    //     // $invoiceItem = $entityManager->getRepository(Invoicesitems::class)->find($id);
-
-    //     $data = [
-    //         // 'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/profile.png'),
-    //         'name'         => 'John Doe',
-    //         'address'      => 'USA',
-    //         'mobileNumber' => '000000000',
-    //         'email'        => 'john.doe@email.com'
-    //     ];
-
-    //     $html =  $this->renderView('pdf_generator/index.html.twig', $data);
-    //     $dompdf = new Dompdf();
-    //     $dompdf->loadHtml($html);
-    //     $dompdf->setPaper('A4', 'landscape');
-    //     $dompdf->render();
-         
-    //     return new Response (
-    //         $dompdf->stream('resume', ["Attachment" => false]),
-    //         Response::HTTP_OK,
-    //         ['Content-Type' => 'application/pdf']
-    //     );
-    // }
 
 
 

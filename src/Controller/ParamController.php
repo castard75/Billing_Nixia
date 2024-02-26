@@ -1,5 +1,5 @@
 <?php
-
+/* Au niveau de la facturation un coefficient ajustable à été demandé pour traiter le montant final , j'ai donc crée un champs éditable dans la vue, puis je met à jour le coefficient dans la table*/
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

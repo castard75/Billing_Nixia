@@ -1,4 +1,7 @@
 <?php
+/* pour crée un formulaire de liaison des numéros et des contrats J'ai décidé d'utilisé FormBuilder,
+Celui ci se base sur une entity pour être construit donc j'ai crée un TelephoneDTO ayant pour propriétés telephone et contrat. 
+Une fonction sprintf de l'entity est chargé de renvoyé une propriété précise. Private $telephone renverra par défault cette propriété   */
 
 namespace App\DTO;
 

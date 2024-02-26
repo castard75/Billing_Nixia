@@ -1,5 +1,6 @@
 <?php
-
+/* J'utilise un fichier CountryCodes.json qui regroupe tout les indicatifs par Pays pour initialisé la table indicatif.
+Par la suite j'utiliserais la table indicatif pour faire le traitement des fichié csv*/
 namespace App\Command;
 
 use App\Entity\Contract;
@@ -76,9 +77,7 @@ class IndicatifCommand extends Command
 
 
 
-                    // if (isset($country["prefixe"][0])) {
-                    //     echo $country["prefixe"][0];
-                    // }
+                   
                     $label = $country['name'];
                     $iso = $country['iso'];
                     $region = $country['region'];
@@ -98,7 +97,7 @@ class IndicatifCommand extends Command
                     $this->entityManager->persist($indicatifSda);
                     // Envoi des données par paquet de 20 à la base de données
                     if (($count % $batchSize) === 0) {
-                        $this->entityManager->flush(); // Exécute un INSERT INTO pour chaque produit
+                        $this->entityManager->flush(); 
                         $this->entityManager->clear(); // Libère la mémoire
                     }
 

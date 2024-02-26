@@ -1,5 +1,7 @@
 <?php
 
+/* La prochaine étape fut de récupéré les données provenants de dolibar tels que les Contrats et Customers, car l'objectif est de lié les numéros au contrats qui sont eux même lié au customers.
+Pour se faire j'ai donc crée deux Commands de synchronisation*/
 namespace App\Command;
 
 use App\Entity\Contracts;

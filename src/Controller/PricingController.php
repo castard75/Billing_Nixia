@@ -46,7 +46,7 @@ class PricingController extends AbstractController
 
         $cdrRepository = $this->em->getRepository(Cdr::class);
         $qb = $cdrRepository->createQueryBuilder('c');
-
+//Je récupère les Numéros dans la table Controle et je retourne un tableau avec tout les élements qui sont les contrats et les numéros qui est la première étape du procésus de facturation
         $qb->select('c.caller', 'SUM(c.price) AS total_price')
             ->where($qb->expr()->like('c.caller', ':prefix'))
             ->setParameter('prefix', '+%')
@@ -54,7 +54,7 @@ class PricingController extends AbstractController
         
         $resultWithPrefix = $qb->getQuery()->getResult();
 
-        /* Numéros sans prefixe */
+        
         $NumWithoutPrefix = $cdrRepository->createQueryBuilder('c');
 
         $NumWithoutPrefix->select('c.caller', 'SUM(c.price) AS total_price')
@@ -93,11 +93,13 @@ class PricingController extends AbstractController
     }
 
 
-
+    /*Lors du click pour la demande de facturation je verifie si le contrat est en cours ou terminer.En fonction de ce paramètre j'éxécute un traitement approprié.
+    Si le contrat est terminer je lance une recherche dans la table cdr qui récupère les communications entre le date de début du mois dernier et la date de fin de contrat qui est géré automatiquement dans Gestion des associations.
+    Sinon si le contrat est en cours je fait une récupération des communications concernant le numéro sélectionné entre le début et la fin du mois. La données est envoyé via un service avec via la méthode createInvoice()*/
 
     #[Route('/getPrice', name: 'app_getPrice',  methods: ['POST'])]
     public function makeTotal(Request $request ,EntityManagerInterface $entity): Response
-    {
+    {   
         $controlRepository = $this->em->getRepository(Controle::class);
         $coefficient = $this->em->getRepository(Coefficient::class)->find(1);
         $cdrRepository = $this->em->getRepository(Cdr::class);
@@ -127,6 +129,7 @@ class PricingController extends AbstractController
             $contratname= $val['name'];
 
             //-------------Recuperation des lignes selectionnées dans  la table controle-------------//
+
             $findLine = $controlRepository->findBy(['telephoneid' => $telId, 'contratid'=>$contratChecked]);
 
 
@@ -233,8 +236,7 @@ class PricingController extends AbstractController
  
             $jsonData = json_decode($request->getContent(), true);
             $dataToSend = array();
-            // $this->insertService->createInvoice($jsonData);
-        
+                  
              $injection = $this->insertService->createInvoice($jsonData); //Stockage de la facture en Bdd 
 
            return new JsonResponse(['success' => true]);

@@ -1,5 +1,9 @@
 <?php
 // src/Command/CreateUserCommand.php
+/* Après le traitement du csv , j'analyse le csv pour détecter de nouveau numéros et les synchroniser dans la table Telephone tout en 
+verifiant si il le numéro n'existe pas déja.
+Dans le cas ou les numéros sont déja dans la table il n'y aura pas de données envoyé en base de données*/
+
 namespace App\Command;
 use App\Entity\Cdr;
 use App\Entity\Telephone;

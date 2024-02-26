@@ -1,5 +1,7 @@
 <?php
-
+ /* J'ai mis en place le une commande qui analyse le csv avec le package Reader, 
+ le but ici est de d'enregistrer chaque ligne de communications, de les classifié par pays et type de telephone si il s'agit de mobile ou de fixe
+  en se référent à la table indicatif. A la suite de ce traitement je déplace le fichier dans le dossier processed avec la date de traitement*/
 namespace App\Command\voxnode;
 
 use DateTimeImmutable;

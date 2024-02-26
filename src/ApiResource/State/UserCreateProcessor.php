@@ -1,5 +1,9 @@
 <?php
-
+/* ici je récupère la data qui m'a été envoyé depuis le front, je verifie si la data est bien une instance de
+UserDTO et je j'initialise un nouvel utilisateur,
+ mettant en place le hashage de sont mot de passe puis ainsi que
+  son role qui est définis en tant que ROLE_USER,ensuite j'envoie la data en bdd
+*/
 namespace App\ApiResource\State;
 
 use App\ApiResource\DTO\UserDTO;

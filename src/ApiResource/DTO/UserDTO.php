@@ -1,6 +1,6 @@
 <?php
-//  Impossibilité d'envoyé un mot de passe hashé depuis react donc j'ai mis en place un UserDTO qui récupère les données envoyé depuis react et pour créé un nouvel utilisateur,
-//  dans cette classe je crée des propriété qui recoivent la data qui sera initialié dans UserCreateProcessor 
+//  Lors de l'enregistrement d'un utilisateur, envoyé un mot de passe hashé depuis le react n'est pas sécurisé donc j'ai mis en place un UserDTO qui récupère les données envoyé depuis react et pour créé un nouvel utilisateur,
+//  dans cette classe je crée des propriétés qui recoivent la data qui sera initialié dans UserCreateProcessor 
 namespace App\ApiResource\DTO;
 
 class UserDTO

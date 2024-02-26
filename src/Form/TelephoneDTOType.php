@@ -1,5 +1,6 @@
 <?php
-
+/* Le FormBuilder est construit sur la base du TelephoneDTO,la propriété telephone est initialisé en tant que entityType qui représente un Select, et est irrigué ave la class Telephone car private $telephone,
+ attend une propriété de type télephone d'ou la mise en place d'un Assert de Type(Telephone::class) dans le TelephoneDTO */ 
 namespace App\Form;
 
 use App\DTO\TelephoneDTO;

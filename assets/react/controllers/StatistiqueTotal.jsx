@@ -62,6 +62,7 @@ export default function StatistiqueTotal() {
         /*######################## CALCUL DU TOTAL EN FONCTION DU months ########################*/
 
         const groupedByMonth = invoicesitems.reduce((accumulator, element) => {
+          //je regarde si dans mon tableau d'accumulateur il y a un element de invoiceitems ayant le même mois qui est déja dans le tableau d'accumulateur
           const existingItem = accumulator.find(
             (group) => group.month === element.month
           );
